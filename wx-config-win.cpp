@@ -945,10 +945,10 @@ public:
         if (cfg["USE_GUI"] == "1")
             po["PORTNAME"] = "msw";
 
-        if (cfg["BUILD"] == "debug" && cfg["DEBUG_FLAG"] == "default")
+        if (cfg["DEBUG_FLAG"] == "1")
             po["WXDEBUGFLAG"] = "d";
 
-        if (cfg["DEBUG_FLAG"] == "1")
+        if (cfg["BUILD"] == "debug")
             po["WXDEBUGFLAG"] = "d";
 
         if (cfg["UNICODE"] == "1")
