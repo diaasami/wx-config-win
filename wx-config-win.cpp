@@ -947,10 +947,10 @@ public:
 
 //        if (cfg["DEBUG_FLAG"] == "1")
 //            po["WXDEBUGFLAG"] = "d";
-			
+
         if (cfg["BUILD"] == "debug")
             po["WXDEBUGFLAG"] = "d";
-		
+
         if (cfg["UNICODE"] == "1")
             po["WXUNICODEFLAG"] = "u";
 
@@ -1078,6 +1078,9 @@ public:
 
         po["cflags"]  = easyMode(po["__DEBUGINFO"]) + easyMode(po["__OPTIMIZEFLAG_2"]) + po["__THREADSFLAG"];
         po["cflags"] += po["GCCFLAGS"] + addDefine("HAVE_W32API_H") + addDefine("__WXMSW__") + po["__WXUNIV_DEFINE_p"];
+        if(cfg["BUILD"] == "release")
+            po["cflags"] += addDefine("NDEBUG");
+
         po["cflags"] += po["__DEBUG_DEFINE_p"] + po["__EXCEPTIONS_DEFINE_p"] + po["__RTTI_DEFINE_p"];
         po["cflags"] += po["__THREAD_DEFINE_p"] + po["__UNICODE_DEFINE_p"] + po["__MSLU_DEFINE_p"];
         po["cflags"] += po["__GFXCTX_DEFINE_p"];
