@@ -256,8 +256,8 @@ public:
 
             std::cerr << "Usage: wx-config [options]\n";
             std::cerr << "Options:\n";
-            std::cerr << "  --prefix[=DIR]              Path of the wxWidgets installation (ie. C:\\wxWidgets2.6.3)\n";
-            std::cerr << "  --wxcfg[=DIR]               Relative path of the build.cfg file (ie. gcc_dll\\mswud)\n";
+            std::cerr << "  --prefix[=DIR]              Path of the wxWidgets installation (ie. C:/wxWidgets2.6.3)\n";
+            std::cerr << "  --wxcfg[=DIR]               Relative path of the build.cfg file (ie. gcc_dll/mswud)\n";
 //          std::cerr << "  --list                      Lists all the library configurations. [NOT IMPLEMENTED]\n";
             std::cerr << "  --cflags                    Outputs all pre-processor and compiler flags.\n";
             std::cerr << "  --cxxflags                  Same as --cflags but for C++.\n";
@@ -840,7 +840,7 @@ public:
 
     void process(Options& po, const CmdLineOptions& cl) {
         /// Searchs for '<prefix>\build\msw\config.*' first
-        std::string cfg_first = po["prefix"] + "\\build\\msw\\config." + getName();
+        std::string cfg_first = po["prefix"] + "/build/msw/config." + getName();
 
         /// config.* options
         BuildFileOptions cfg(cfg_first);
@@ -990,9 +990,9 @@ public:
 //----------------------------------------------------
 
         // ### Variables, Part 2: ###
-        po["LIBDIRNAME"] = po["prefix"] + "\\lib\\" + getName() + "_" + po["LIBTYPE_SUFFIX"] + cfg["CFG"];
+        po["LIBDIRNAME"] = po["prefix"] + "/lib/" + getName() + "_" + po["LIBTYPE_SUFFIX"] + cfg["CFG"];
 
-        po["SETUPHDIR"]  = po["LIBDIRNAME"] + "\\" + po["PORTNAME"] + po["WXUNIVNAME"];
+        po["SETUPHDIR"]  = po["LIBDIRNAME"] + "/" + po["PORTNAME"] + po["WXUNIVNAME"];
         po["SETUPHDIR"] += po["WXUNICODEFLAG"] + po["WXDEBUGFLAG"];
 
         po["cflags"]  = easyMode(po["__DEBUGINFO"]) + easyMode(po["__OPTIMIZEFLAG_2"]) + po["__THREADSFLAG"];
@@ -1003,9 +1003,9 @@ public:
         po["cflags"] += po["__DEBUG_DEFINE_p"] + po["__EXCEPTIONS_DEFINE_p"] + po["__RTTI_DEFINE_p"];
         po["cflags"] += po["__THREAD_DEFINE_p"] + po["__UNICODE_DEFINE_p"] + po["__MSLU_DEFINE_p"];
         po["cflags"] += po["__GFXCTX_DEFINE_p"];
-        po["cflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "\\include");/*-W */
+        po["cflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "/include");/*-W */
         po["cflags"] += easyMode(addFlag("-Wall")) + easyMode(addIncludeDir(".")) + po["__DLLFLAG_p"];
-        po["cflags"] += easyMode(addIncludeDir(".\\..\\..\\samples")) + /*addDefine("NOPCH") +*/ po["__RTTIFLAG_5"] + po["__EXCEPTIONSFLAG_6"];
+        po["cflags"] += easyMode(addIncludeDir("./../../samples")) + /*addDefine("NOPCH") +*/ po["__RTTIFLAG_5"] + po["__EXCEPTIONSFLAG_6"];
         po["cflags"] += addFlag("-Wno-ctor-dtor-privacy") + addFlag("-pipe") + addFlag("-fmessage-length=0");
         po["cflags"] += cfg["CPPFLAGS"] + " " + cfg["CXXFLAGS"] + " ";
 
@@ -1032,9 +1032,9 @@ public:
         po["rcflags"] += po["__DEBUG_DEFINE_p_1"] + po["__EXCEPTIONS_DEFINE_p_1"];
         po["rcflags"] += po["__RTTI_DEFINE_p_1"] + po["__THREAD_DEFINE_p_1"] + po["__UNICODE_DEFINE_p_1"];
         po["rcflags"] += po["__MSLU_DEFINE_p_1"] + po["__GFXCTX_DEFINE_p_1"] + addResIncludeDir(po["SETUPHDIR"]);
-        po["rcflags"] += addResIncludeDir(po["prefix"] + "\\include") + easyMode(addResIncludeDir("."));
+        po["rcflags"] += addResIncludeDir(po["prefix"] + "/include") + easyMode(addResIncludeDir("."));
         po["rcflags"] += po["__DLLFLAG_p_1"];
-        po["rcflags"] += easyMode(addResIncludeDir(po["prefix"] + "\\samples"));
+        po["rcflags"] += easyMode(addResIncludeDir(po["prefix"] + "/samples"));
 
         po["release"] = cfg["WXVER_MAJOR"] + "." + cfg["WXVER_MINOR"];
         po["version"] = cfg["WXVER_MAJOR"] + "." + cfg["WXVER_MINOR"] + "." + cfg["WXVER_RELEASE"];
@@ -1079,7 +1079,7 @@ public:
 
     void process(Options& po, const CmdLineOptions& cl) {
         /// Searchs for '<prefix>\build\msw\config.*' first
-        std::string cfg_first = po["prefix"] + "\\build\\msw\\config." + getName();
+        std::string cfg_first = po["prefix"] + "/build/msw/config." + getName();
 
         /// config.* options
         BuildFileOptions cfg(cfg_first);
@@ -1301,9 +1301,9 @@ public:
 
 
         // ### Variables, Part 2: ###
-        po["LIBDIRNAME"] = po["prefix"] + "\\lib\\" + getName() + "_" + po["LIBTYPE_SUFFIX"] + cfg["CFG"];
+        po["LIBDIRNAME"] = po["prefix"] + "/lib/" + getName() + "_" + po["LIBTYPE_SUFFIX"] + cfg["CFG"];
 
-        po["SETUPHDIR"]  = po["LIBDIRNAME"] + "\\" + po["PORTNAME"] + po["WXUNIVNAME"];
+        po["SETUPHDIR"]  = po["LIBDIRNAME"] + "/" + po["PORTNAME"] + po["WXUNIVNAME"];
         po["SETUPHDIR"] += po["WXUNICODEFLAG"] + po["WXDEBUGFLAG"];
 
         po["cflags"]  = easyMode(po["__DEBUGINFO_0"]) + easyMode(po["__OPTIMIZEFLAG_4"]);
@@ -1312,8 +1312,8 @@ public:
         po["cflags"] += po["__DEBUG_DEFINE_p"] + po["__EXCEPTIONS_DEFINE_p"] + po["__RTTI_DEFINE_p"];
         po["cflags"] += po["__THREAD_DEFINE_p"] + po["__UNICODE_DEFINE_p"] + po["__MSLU_DEFINE_p"];
         po["cflags"] += po["__GFXCTX_DEFINE_p"];
-        po["cflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "\\include") + easyMode(addFlag("-w-")) + easyMode(addIncludeDir(".")) + po["__DLLFLAG_p"] + easyMode(addFlag("-WA"));
-        po["cflags"] += easyMode(addIncludeDir(po["prefix"] + "\\samples")) + easyMode(addDefine("NOPCH")) + po["__RTTIFLAG_9"] + po["__EXCEPTIONSFLAG_10"];
+        po["cflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "/include") + easyMode(addFlag("-w-")) + easyMode(addIncludeDir(".")) + po["__DLLFLAG_p"] + easyMode(addFlag("-WA"));
+        po["cflags"] += easyMode(addIncludeDir(po["prefix"] + "/samples")) + easyMode(addDefine("NOPCH")) + po["__RTTIFLAG_9"] + po["__EXCEPTIONSFLAG_10"];
         po["cflags"] += cfg["CPPFLAGS"] + " " + cfg["CXXFLAGS"] + " ";
 
 
@@ -1323,7 +1323,7 @@ public:
         po["libs"] += easyMode(addFlag("/EXETYPE:NT"));
         po["libs"] += cfg["LDFLAGS"] + " ";
         po["libs"] += easyMode(po["__DEBUGINFO_1"]);
-        po["libs"] += addLinkerDir(po["LIBDIRNAME"] + "\\");
+        po["libs"] += addLinkerDir(po["LIBDIRNAME"] + "/");
         po["libs"] += easyMode(addFlag("/su:windows:4.0"));
         po["libs"] += getAllLibs(po);
 
@@ -1331,9 +1331,9 @@ public:
         po["rcflags"] += po["__WXUNIV_DEFINE_p"] + po["__DEBUG_DEFINE_p"] + po["__EXCEPTIONS_DEFINE_p"];
         po["rcflags"] += po["__RTTI_DEFINE_p"] + po["__THREAD_DEFINE_p"] + po["__UNICODE_DEFINE_p"];
         po["rcflags"] += po["__MSLU_DEFINE_p"] + po["__GFXCTX_DEFINE_p"] + addResIncludeDir(po["SETUPHDIR"]);
-        po["rcflags"] += addResIncludeDir(po["prefix"] + "\\include") + easyMode(addResIncludeDir("."));
+        po["rcflags"] += addResIncludeDir(po["prefix"] + "/include") + easyMode(addResIncludeDir("."));
         po["rcflags"] += po["__DLLFLAG_p"];
-        po["rcflags"] += easyMode(addResIncludeDir(po["prefix"] + "\\samples"));
+        po["rcflags"] += easyMode(addResIncludeDir(po["prefix"] + "/samples"));
         po["rcflags"] += easyMode(addFlag("-32")) + easyMode(addFlag("-v-"));
 
 
@@ -1380,7 +1380,7 @@ public:
 
     void process(Options& po, const CmdLineOptions& cl) {
         /// Searchs for '<prefix>\build\msw\config.*' first
-        std::string cfg_first = po["prefix"] + "\\build\\msw\\config." + getName();
+        std::string cfg_first = po["prefix"] + "/build/msw/config." + getName();
 
         /// config.* options
         BuildFileOptions cfg(cfg_first);
@@ -1618,9 +1618,9 @@ public:
 
 
         // ### Variables, Part 2: ###
-        po["LIBDIRNAME"] = po["prefix"] + "\\lib\\" + getName() + po["DIR_SUFFIX_CPU"] + "_" + po["LIBTYPE_SUFFIX"] + cfg["CFG"];
+        po["LIBDIRNAME"] = po["prefix"] + "/lib/" + getName() + po["DIR_SUFFIX_CPU"] + "_" + po["LIBTYPE_SUFFIX"] + cfg["CFG"];
 
-        po["SETUPHDIR"]  = po["LIBDIRNAME"] + "\\" + po["PORTNAME"] + po["WXUNIVNAME"];
+        po["SETUPHDIR"]  = po["LIBDIRNAME"] + "/" + po["PORTNAME"] + po["WXUNIVNAME"];
         po["SETUPHDIR"] += po["WXUNICODEFLAG"] + po["WXDEBUGFLAG"];
 
         po["cflags"]  = "/M" + po["__RUNTIME_LIBS_8"] + po["__DEBUGRUNTIME_3"] + " " + addDefine("WIN32");
@@ -1628,8 +1628,8 @@ public:
         po["cflags"] += easyMode(po["__OPTIMIZEFLAG_4"]) + po["__NO_VC_CRTDBG_p"] + addDefine("__WXMSW__") + po["__WXUNIV_DEFINE_p"];
         po["cflags"] += po["__DEBUG_DEFINE_p"] + po["__EXCEPTIONS_DEFINE_p"] + po["__RTTI_DEFINE_p"];
         po["cflags"] += po["__THREAD_DEFINE_p"] + po["__UNICODE_DEFINE_p"] + po["__MSLU_DEFINE_p"] + po["__GFXCTX_DEFINE_p"];
-        po["cflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "\\include") + easyMode(addFlag("/W4")) + easyMode(addIncludeDir(".")) + po["__DLLFLAG_p"] + addDefine("_WINDOWS");
-        po["cflags"] += easyMode(addIncludeDir(po["prefix"] + "\\samples")) + easyMode(addDefine("NOPCH")) + po["__RTTIFLAG_9"] + po["__EXCEPTIONSFLAG_10"];
+        po["cflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "/include") + easyMode(addFlag("/W4")) + easyMode(addIncludeDir(".")) + po["__DLLFLAG_p"] + addDefine("_WINDOWS");
+        po["cflags"] += easyMode(addIncludeDir(po["prefix"] + "/samples")) + easyMode(addDefine("NOPCH")) + po["__RTTIFLAG_9"] + po["__EXCEPTIONSFLAG_10"];
         po["cflags"] += cfg["CPPFLAGS"] + " " + cfg["CXXFLAGS"] + " ";
 
         po["libs"]  = easyMode(addFlag("/NOLOGO"));
@@ -1643,9 +1643,9 @@ public:
         po["rcflags"] += po["__WXUNIV_DEFINE_p_1"] + po["__DEBUG_DEFINE_p_1"] + po["__EXCEPTIONS_DEFINE_p_1"];
         po["rcflags"] += po["__RTTI_DEFINE_p_1"] + po["__THREAD_DEFINE_p_1"] + po["__UNICODE_DEFINE_p_1"];
         po["rcflags"] += po["__MSLU_DEFINE_p_1"] + po["__GFXCTX_DEFINE_p_1"] + addResIncludeDir(po["SETUPHDIR"]);
-        po["rcflags"] += addResIncludeDir(po["prefix"] + "\\include") + easyMode(addResIncludeDir("."));
+        po["rcflags"] += addResIncludeDir(po["prefix"] + "/include") + easyMode(addResIncludeDir("."));
         po["rcflags"] += po["__DLLFLAG_p_1"] + addResDefine("_WINDOWS");
-        po["rcflags"] += easyMode(addResIncludeDir(po["prefix"] + "\\samples"));
+        po["rcflags"] += easyMode(addResIncludeDir(po["prefix"] + "/samples"));
 
 
         po["release"] = cfg["WXVER_MAJOR"] + "." + cfg["WXVER_MINOR"];
@@ -1690,7 +1690,7 @@ public:
 
     void process(Options& po, const CmdLineOptions& cl) {
         /// Searchs for '<prefix>\build\msw\config.*' first
-        std::string cfg_first = po["prefix"] + "\\build\\msw\\config." + getName();
+        std::string cfg_first = po["prefix"] + "/build/msw/config." + getName();
 
         /// config.* options
         BuildFileOptions cfg(cfg_first);
@@ -1827,19 +1827,19 @@ public:
 
 
         // ### Variables, Part 2: ###
-        po["LIBDIRNAME"] = po["prefix"] + "\\lib\\" + getName() + "_" + po["LIBTYPE_SUFFIX"] + cfg["CFG"];
+        po["LIBDIRNAME"] = po["prefix"] + "/lib/" + getName() + "_" + po["LIBTYPE_SUFFIX"] + cfg["CFG"];
 
-        po["SETUPHDIR"]  = po["LIBDIRNAME"] + "\\" + po["PORTNAME"] + po["WXUNIVNAME"];
+        po["SETUPHDIR"]  = po["LIBDIRNAME"] + "/" + po["PORTNAME"] + po["WXUNIVNAME"];
         po["SETUPHDIR"] += po["WXUNICODEFLAG"] + po["WXDEBUGFLAG"];
 
         po["cflags"]  = easyMode(po["__DEBUGINFO_0"]) + easyMode(po["__OPTIMIZEFLAG_2"]) + po["__THREADSFLAG_5"];
         po["cflags"] += po["__RUNTIME_LIBS_6"] + addDefine("__WXMSW__") + po["__WXUNIV_DEFINE_p"];
         po["cflags"] += po["__DEBUG_DEFINE_p"] + po["__EXCEPTIONS_DEFINE_p"] + po["__RTTI_DEFINE_p"];
         po["cflags"] += po["__THREAD_DEFINE_p"] + po["__UNICODE_DEFINE_p"] + po["__MSLU_DEFINE_p"] + po["__GFXCTX_DEFINE_p"];
-        po["cflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "\\include");
+        po["cflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "/include");
         po["cflags"] += addFlag("-wx") + addFlag("-wcd=549") + addFlag("-wcd=656") + addFlag("-wcd=657") + addFlag("-wcd=667");
         po["cflags"] += easyMode(addIncludeDir(".")) + po["__DLLFLAG_p"];
-        po["cflags"] += easyMode(addIncludeDir(po["prefix"] + "\\samples")) + addDefine("NOPCH") + po["__RTTIFLAG_7"] + po["__EXCEPTIONSFLAG_8"];
+        po["cflags"] += easyMode(addIncludeDir(po["prefix"] + "/samples")) + addDefine("NOPCH") + po["__RTTIFLAG_7"] + po["__EXCEPTIONSFLAG_8"];
         po["cflags"] += cfg["CPPFLAGS"] + " " + cfg["CXXFLAGS"] + " ";
 
         po["lbc"]  = "option quiet\n";
@@ -1856,9 +1856,9 @@ public:
         po["rcflags"] += po["__DEBUG_DEFINE_p"] + po["__EXCEPTIONS_DEFINE_p"];
         po["rcflags"] += po["__RTTI_DEFINE_p"] + po["__THREAD_DEFINE_p"] + po["__UNICODE_DEFINE_p"];
         po["rcflags"] += po["__MSLU_DEFINE_p"] + po["__GFXCTX_DEFINE_p"] + addResIncludeDir(po["SETUPHDIR"]);
-        po["rcflags"] += addResIncludeDir(po["prefix"] + "\\include") + easyMode(addResIncludeDir("."));
+        po["rcflags"] += addResIncludeDir(po["prefix"] + "/include") + easyMode(addResIncludeDir("."));
         po["rcflags"] += po["__DLLFLAG_p_1"];
-        po["rcflags"] += easyMode(addResIncludeDir(po["prefix"] + "\\samples"));
+        po["rcflags"] += easyMode(addResIncludeDir(po["prefix"] + "/samples"));
 
         po["release"] = cfg["WXVER_MAJOR"] + "." + cfg["WXVER_MINOR"];
         po["version"] = cfg["WXVER_MAJOR"] + "." + cfg["WXVER_MINOR"] + "." + cfg["WXVER_RELEASE"];
@@ -1908,16 +1908,16 @@ public:
 void normalizePath(std::string& path)
 {
     // converts all slashes to backslashes
-    std::replace(path.begin(), path.end(), '/', '\\');
+    std::replace(path.begin(), path.end(), '/', '/');
 
     // removes the first slash (if any) from the given path
     std::string::iterator firstChar = path.begin();
-    if (*firstChar == '\\')
+    if (*firstChar == '/')
         path.erase(firstChar);
 
     // removes the last slash (if any) from the given path
     std::string::iterator lastChar = path.end() - 1;
-    if (*lastChar == '\\')
+    if (*lastChar == '/')
         path.erase(lastChar);
 }
 
@@ -2145,7 +2145,7 @@ void autodetectConfiguration(Options& po, const CmdLineOptions& cl)
     // reads the first setup.h it founds
     bool found = false;
     for(std::vector<std::string>::const_iterator it = cfgs.begin(); it != cfgs.end(); ++it) {
-        std::string file = po["prefix"] + "\\lib\\" + *it + "\\wx\\setup.h";
+        std::string file = po["prefix"] + "/lib/" + *it + "/wx/setup.h";
         std::ifstream setupH(file.c_str());
         if (setupH.is_open()) {
             if (!found) {
@@ -2155,8 +2155,8 @@ void autodetectConfiguration(Options& po, const CmdLineOptions& cl)
                 std::cerr << g_tokWarning << "Multiple compiled configurations of wxWidgets have been detected." << std::endl;
                 std::cerr << "Using first detected version by default." << std::endl;
                 std::cerr << std::endl;
-                std::cerr << "Please use the --wxcfg flag (as in wx-config --wxcfg=gcc_dll\\mswud)" << std::endl;
-                std::cerr << "or set the environment variable WXCFG (as in WXCFG=gcc_dll\\mswud)" << std::endl;
+                std::cerr << "Please use the --wxcfg flag (as in wx-config --wxcfg=gcc_dll/mswud)" << std::endl;
+                std::cerr << "or set the environment variable WXCFG (as in WXCFG=gcc_dll/mswud)" << std::endl;
                 std::cerr << "to specify which configuration exactly you want to use." << std::endl;
                 return;
             }
@@ -2168,8 +2168,8 @@ void autodetectConfiguration(Options& po, const CmdLineOptions& cl)
 
         std::cout << g_tokError << "No setup.h file has been auto-detected." << std::endl;
         std::cerr << std::endl;
-        std::cerr << "Please use the --wxcfg flag (as in wx-config --wxcfg=gcc_dll\\mswud)" << std::endl;
-        std::cerr << "or set the environment variable WXCFG (as in WXCFG=gcc_dll\\mswud)" << std::endl;
+        std::cerr << "Please use the --wxcfg flag (as in wx-config --wxcfg=gcc_dll/mswud)" << std::endl;
+        std::cerr << "or set the environment variable WXCFG (as in WXCFG=gcc_dll/mswud)" << std::endl;
         std::cerr << "to specify which configuration exactly you want to use." << std::endl;
 
         exit(1);
@@ -2231,8 +2231,8 @@ void checkAdditionalFlags(Options& po, const CmdLineOptions& cl)
 void detectCompiler(Options& po, const CmdLineOptions& cl)
 {
     // input example of po["wxcfg"]:
-    // gcc_dll\\mswud
-    // vc_lib\\msw
+    // gcc_dll/mswud
+    // vc_lib/msw
 
     if (po["wxcfg"].find("gcc_") != std::string::npos) {
         CompilerMinGW compiler;
@@ -2271,13 +2271,13 @@ void detectCompiler(Options& po, const CmdLineOptions& cl)
 void validatePrefix(const std::string& prefix)
 {
     // tests if prefix is a valid dir. checking if there is an \include\wx\wx.h
-    const std::string testfile = prefix + "\\include\\wx\\wx.h";
+    const std::string testfile = prefix + "/include/wx/wx.h";
     std::ifstream prefixIsValid(testfile.c_str());
     if (!prefixIsValid.is_open()) {
         std::cout << g_tokError << "wxWidgets hasn't been found installed at '" << prefix << "'." << std::endl;
         std::cerr << std::endl;
-        std::cerr << "Please use the --prefix flag (as in wx-config --prefix=C:\\wxWidgets)" << std::endl;
-        std::cerr << "or set the environment variable WXWIN (as in WXWIN=C:\\wxWidgets)" << std::endl;
+        std::cerr << "Please use the --prefix flag (as in wx-config --prefix=C:/wxWidgets)" << std::endl;
+        std::cerr << "or set the environment variable WXWIN (as in WXWIN=C:/wxWidgets)" << std::endl;
         std::cerr << "to specify where is your installation of wxWidgets." << std::endl;
 
         exit(1);
@@ -2298,8 +2298,8 @@ bool validateConfiguration(const std::string& wxcfgfile, const std::string& wxcf
         if (!isSetupHOpen && exitIfError) {
             std::cout << g_tokError << "No valid setup.h of wxWidgets has been found at location: " << wxcfgsetuphfile << std::endl;
             std::cerr << std::endl;
-            std::cerr << "Please use the --wxcfg flag (as in wx-config --wxcfg=gcc_dll\\mswud)" << std::endl;
-            std::cerr << "or set the environment variable WXCFG (as in WXCFG=gcc_dll\\mswud)" << std::endl;
+            std::cerr << "Please use the --wxcfg flag (as in wx-config --wxcfg=gcc_dll/mswud)" << std::endl;
+            std::cerr << "or set the environment variable WXCFG (as in WXCFG=gcc_dll/mswud)" << std::endl;
             std::cerr << "to specify which configuration exactly you want to use." << std::endl;
 
             exit(1);
@@ -2307,8 +2307,8 @@ bool validateConfiguration(const std::string& wxcfgfile, const std::string& wxcf
 
         std::cout << g_tokError << "No valid configuration of wxWidgets has been found at location: " << wxcfgfile << std::endl;
         std::cerr << std::endl;
-        std::cerr << "Please use the --wxcfg flag (as in wx-config --wxcfg=gcc_dll\\mswud)" << std::endl;
-        std::cerr << "or set the environment variable WXCFG (as in WXCFG=gcc_dll\\mswud)" << std::endl;
+        std::cerr << "Please use the --wxcfg flag (as in wx-config --wxcfg=gcc_dll/mswud)" << std::endl;
+        std::cerr << "or set the environment variable WXCFG (as in WXCFG=gcc_dll/mswud)" << std::endl;
         std::cerr << "to specify which configuration exactly you want to use." << std::endl;
 
         exit(1);
@@ -2388,8 +2388,13 @@ int main(int argc, char* argv[])
 
     if (cl.keyExists("--prefix"))
         po["prefix"] = cl["--prefix"];
-    else if (getenv("WXWIN"))
-        po["prefix"] = getenv("WXWIN");
+
+    else if (getenv("WXWIN")) {
+        std::string wx_win = getenv("WXWIN");
+        std::replace(wx_win.begin(), wx_win.end(), '\\', '/');
+        po["prefix"] = wx_win;
+    }
+
     else {
 #ifdef _WIN32
         /// Assume that, like a *nix, we're installed in C:\some\path\bin,
@@ -2419,7 +2424,7 @@ int main(int argc, char* argv[])
         po["prefix"] = libPath;
         delete[] libPath;
 #else
-        po["prefix"] = "C:\\wxWidgets";
+        po["prefix"] = "C:/wxWidgets";
 #endif
     }
 
@@ -2433,9 +2438,9 @@ int main(int argc, char* argv[])
         po["wxcfg"] = getenv("WXCFG");
     else {
         // Try if something valid can be found trough deriving checkAdditionalFlags() first
-        po["wxcfg"] = "gcc_dll\\msw";
-        po["wxcfgfile"] = po["prefix"] + "\\lib\\" + po["wxcfg"] + "\\build.cfg";
-        po["wxcfgsetuphfile"] = po["prefix"] + "\\lib\\" + po["wxcfg"] + "\\wx\\setup.h";
+        po["wxcfg"] = "gcc_dll/msw";
+        po["wxcfgfile"] = po["prefix"] + "/lib/" + po["wxcfg"] + "/build.cfg";
+        po["wxcfgsetuphfile"] = po["prefix"] + "/lib/" + po["wxcfg"] + "/wx/setup.h";
         checkAdditionalFlags(po, cl);
 
         if (!validateConfiguration(po["wxcfgfile"], po["wxcfgsetuphfile"], false))
@@ -2444,8 +2449,8 @@ int main(int argc, char* argv[])
 
     normalizePath(po["wxcfg"]);
     checkAdditionalFlags(po, cl);
-    po["wxcfgfile"] = po["prefix"] + "\\lib\\" + po["wxcfg"] + "\\build.cfg";
-    po["wxcfgsetuphfile"] = po["prefix"] + "\\lib\\" + po["wxcfg"] + "\\wx\\setup.h";
+    po["wxcfgfile"] = po["prefix"] + "/lib/" + po["wxcfg"] + "/build.cfg";
+    po["wxcfgsetuphfile"] = po["prefix"] + "/lib/" + po["wxcfg"] + "/wx/setup.h";
     validateConfiguration(po["wxcfgfile"], po["wxcfgsetuphfile"]);
 
     detectCompiler(po, cl);
