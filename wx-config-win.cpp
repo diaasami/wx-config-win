@@ -2370,7 +2370,7 @@ void outputFlags(Options& po, const CmdLineOptions& cl)
         std::cout << po["rcflags"] << std::endl;
     if (cl.keyExists("--release"))
         std::cout << po["release"];
-    if (cl.keyExists("--version"))
+    if (cl.keyExists("--version") && cl.keyValue("--version").empty())
         std::cout << po["version"];
     if (cl.keyExists("--basename"))
         std::cout << po["basename"];
