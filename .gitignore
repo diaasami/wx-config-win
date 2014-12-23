@@ -2,3 +2,5 @@
 /.objs
 /.gitattributes
 /wx-config-win.layout
+/test.bat
+/*.bak
