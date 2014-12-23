@@ -51,23 +51,19 @@ static const std::string g_tokWarning = "wx-config Warning: ";
 class Options
 {
 public:
-    std::string& operator[](const std::string& key)
-    {
+    std::string& operator[](const std::string& key) {
         return m_vars[key];
     }
 
-    bool keyExists(const std::string& key) const
-    {
+    bool keyExists(const std::string& key) const {
         return m_vars.count(key) != 0;
     }
 
-    const std::string& keyValue(const std::string& key) const
-    {
+    const std::string& keyValue(const std::string& key) const {
         return m_vars.find(key)->second;
     }
 
-    std::map<std::string,std::string>& getVars()
-    {
+    std::map<std::string,std::string>& getVars() {
         return m_vars;
     }
 protected:
@@ -80,19 +76,15 @@ protected:
 class BuildFileOptions : public Options
 {
 public:
-    BuildFileOptions(const std::string& filepath)
-    {
+    BuildFileOptions(const std::string& filepath) {
         parse(filepath);
     }
 
-    bool parse(const std::string& filepath)
-    {
+    bool parse(const std::string& filepath) {
         std::string line;
         std::ifstream file(filepath.c_str());
-        if (file.is_open())
-        {
-            while (!file.eof() )
-            {
+        if (file.is_open()) {
+            while (!file.eof() ) {
                 std::getline(file, line);
 
                 // it's a comment line
@@ -108,19 +100,16 @@ public:
 
             if (!m_vars.empty())
                 return true;
-        }
-        else
+        } else
             std::cout << g_tokError << "Unable to open file '" << filepath.c_str() << "'." << std::endl;
 
         return false;
     }
 
 protected:
-    void split(const std::string& line)
-    {
+    void split(const std::string& line) {
         size_t sep = line.find('=');
-        if (sep != std::string::npos)
-        {
+        if (sep != std::string::npos) {
             std::string key = line.substr(0, sep);
             std::string val = line.substr(sep+1, line.size()-sep-1);
             m_vars[key] = val;
@@ -134,25 +123,21 @@ protected:
 class SetupHOptions
 {
 public:
-    bool& operator[](const std::string& key)
-    {
+    bool& operator[](const std::string& key) {
         return m_vars[key];
     }
 
-    bool keyExists(const std::string& key) const
-    {
+    bool keyExists(const std::string& key) const {
         return m_vars.count(key) != 0;
     }
 
-    bool keyValue(const std::string& key) const
-    {
+    bool keyValue(const std::string& key) const {
         return m_vars.find(key)->second;
     }
 
     typedef std::map<std::string,bool> StringBoolMap;
 
-    StringBoolMap& getVars()
-    {
+    StringBoolMap& getVars() {
         return m_vars;
     }
 protected:
@@ -160,19 +145,15 @@ protected:
 
 
 public:
-    SetupHOptions(const std::string& filepath)
-    {
+    SetupHOptions(const std::string& filepath) {
         parse(filepath);
     }
 
-    bool parse(const std::string& filepath)
-    {
+    bool parse(const std::string& filepath) {
         std::string line;
         std::ifstream file(filepath.c_str());
-        if (file.is_open())
-        {
-            while (!file.eof())
-            {
+        if (file.is_open()) {
+            while (!file.eof()) {
                 std::getline(file, line);
 
                 // does the splitting/parsing
@@ -182,15 +163,13 @@ public:
 
             if (!m_vars.empty())
                 return true;
-        }
-        else
+        } else
             std::cout << g_tokError << "Unable to open file '" << filepath.c_str() << "'." << std::endl;
 
         return false;
     }
 
-    void printDebug()
-    {
+    void printDebug() {
         std::cout << "DEBUG: setup.h contents BEGIN -------------------------------------------------" << std::endl;
         for (StringBoolMap::iterator it = m_vars.begin(); it != m_vars.end(); ++it)
             std::cout << it->first << "=" << it->second << std::endl;
@@ -198,8 +177,7 @@ public:
     }
 
 protected:
-    void split(std::string& line)
-    {
+    void split(std::string& line) {
         // it's a comment line
         if (line.find_first_of('/') != std::string::npos)
             return; // skips the line
@@ -212,8 +190,7 @@ protected:
         size_t posDefine = line.find_first_of(tokDefine);
 
         // it's a #define line
-        if (posDefine != std::string::npos)
-        {
+        if (posDefine != std::string::npos) {
             std::string key;
             bool val;
 
@@ -243,13 +220,11 @@ protected:
 class CmdLineOptions : public Options
 {
 public:
-    CmdLineOptions(int argc, char* argv[])
-    {
+    CmdLineOptions(int argc, char* argv[]) {
         parse(argc, argv);
     }
 
-    bool validArgs()
-    {
+    bool validArgs() {
         bool valid = keyExists("--compiler") ||
                      keyExists("--easymode") ||
                      keyExists("--variable") ||
@@ -275,8 +250,7 @@ public:
                      keyExists("-v");
 
         // TODO: not all flags are being validated
-        if(!valid)
-        {
+        if(!valid) {
             if (m_vars.size() > 1 && !keyExists("--help"))
                 std::cout << g_tokError << "Unrecognised option: '" << m_vars.begin()->first << "'\n" << std::endl;
 
@@ -319,10 +293,8 @@ public:
         return valid;
     }
 
-    bool parse(int argc, char* argv[])
-    {
-        for(int i=0; i<argc; ++i)
-        {
+    bool parse(int argc, char* argv[]) {
+        for(int i=0; i<argc; ++i) {
             std::string line;
             line = argv[i];
             split(line);
@@ -331,6 +303,8 @@ public:
                 std::string libsList;
                 if( (i + 1) < argc ) {
                     libsList = argv[i+1];
+                } else {
+                    libsList = "std";
                 }
                 parseLibs(libsList);
             }
@@ -338,64 +312,51 @@ public:
         return true;
     }
 
-    std::vector<std::string> getLibs() const
-    {
+    std::vector<std::string> getLibs() const {
         return m_libs;
     }
 
 protected:
 
-    void split(const std::string& line)
-    {
+    void split(const std::string& line) {
         size_t sep = line.find("=");
-        if (sep != std::string::npos)
-        {
+        if (sep != std::string::npos) {
             std::string key = line.substr(0, sep);
             std::string val = line.substr(sep+1, line.size()-sep-1);
             m_vars[key] = val;
-        }
-        else
+        } else
             m_vars[line] = "";
     }
 
-    bool libExists(const std::string& lib)
-    {
+    bool libExists(const std::string& lib) {
         return std::find(m_libs.begin(), m_libs.end(), lib) != m_libs.end();
     }
 
-    void removeLib(const std::string &lib)
-    {
+    void removeLib(const std::string &lib) {
         std::vector<std::string>::iterator iter = std::find(m_libs.begin(), m_libs.end(), lib);
         if( iter != m_libs.end() ) {
             m_libs.erase(iter);
         }
     }
 
-    void addLib(const std::string& lib)
-    {
+    void addLib(const std::string& lib) {
         // adds the lib if its not present already
         if (!libExists(lib))
             m_libs.push_back(lib);
     }
 
-    void parseLibs(const std::string libs)
-    {
+    void parseLibs(const std::string libs) {
         std::string param = libs;
 
         // if the last parameter doesn't haves a -- switch
-        if (param.find("--") == std::string::npos)
-        {
+        if (param.find("--") == std::string::npos) {
             // saves in the vector, comma separated text like "text1,text2,text3,text4"
-            while(true)
-            {
+            while(true) {
                 size_t comma = param.find(",");
-                if (comma != std::string::npos)
-                {
+                if (comma != std::string::npos) {
                     m_libs.push_back(param.substr(0, comma));
                     param = param.substr(comma+1, param.size()-comma-1);
-                }
-                else
-                {
+                } else {
                     if( param.empty() == false )
                         m_libs.push_back(param);
                     break;
@@ -405,8 +366,7 @@ protected:
 
         // assuming magic keyword 'std' as a lib parameter for non-monolithic
         // magic keyword std: links with xrc,qa,html,adv,core,base_xml,base_net,base,aui,richtext
-        if (m_libs.empty() || libExists("std"))
-        {
+        if (m_libs.empty() || libExists("std")) {
             addLib("aui");
             addLib("xrc");
             addLib("html");
@@ -427,8 +387,7 @@ protected:
 // -------------------------------------------------------------------------------------------------
 
 /// Struct to keep programs
-struct CompilerPrograms
-{
+struct CompilerPrograms {
     std::string cc; // C compiler
     std::string cxx; // C++ compiler
     std::string ld; // dynamic libs linker
@@ -437,8 +396,7 @@ struct CompilerPrograms
 };
 
 /// Struct to keep switches
-struct CompilerSwitches
-{
+struct CompilerSwitches {
     std::string includeDirs;   // -I
     std::string resIncludeDirs;   // --include-dir
     std::string libDirs;       // -L
@@ -461,8 +419,7 @@ static bool g_sEasyMode = false;
 
 void checkEasyMode(CmdLineOptions& cl)
 {
-    if (cl.keyExists("--easymode"))
-    {
+    if (cl.keyExists("--easymode")) {
         if (cl["--easymode"] == "no")
             g_sEasyMode = false;
         else if (cl["--easymode"] == "yes" || cl["--easymode"].empty())
@@ -477,23 +434,20 @@ public:
     Compiler(const std::string& name) : m_name(name) {}
     // ~Compiler();
 
-    std::string easyMode(const std::string& str)
-    {
+    std::string easyMode(const std::string& str) {
         if (g_sEasyMode)
             return str;
         else
             return std::string();
     }
 
-    std::string addFlag(const std::string& flag)
-    {
+    std::string addFlag(const std::string& flag) {
         if (flag.empty())
             return "";
         return flag + " ";
     }
 
-    std::string addLib(const std::string& lib)
-    {
+    std::string addLib(const std::string& lib) {
         std::string result;
         result = m_switches.linkLibs;
 
@@ -512,64 +466,55 @@ public:
         return result;
     }
 
-    std::string addDefine(const std::string& define)
-    {
+    std::string addDefine(const std::string& define) {
         if (define.empty())
             return "";
         return m_switches.defines + define + " ";
     }
 
-    std::string addResDefine(const std::string& resDefine)
-    {
+    std::string addResDefine(const std::string& resDefine) {
         if (resDefine.empty())
             return "";
         return m_switches.resDefines + " " + resDefine + " ";
     }
 
-    std::string addIncludeDir(const std::string& includeDir)
-    {
+    std::string addIncludeDir(const std::string& includeDir) {
         if (includeDir.empty())
             return "";
         return m_switches.includeDirs + includeDir + " ";
     }
 
-    std::string addLinkerDir(const std::string& libDir)
-    {
+    std::string addLinkerDir(const std::string& libDir) {
         if (libDir.empty())
             return "";
         return m_switches.libDirs + libDir + " ";
     }
 
-    std::string addResIncludeDir(const std::string& resIncludeDir)
-    {
+    std::string addResIncludeDir(const std::string& resIncludeDir) {
         if (resIncludeDir.empty())
             return "";
         return m_switches.resIncludeDirs + " " + resIncludeDir + " ";
     }
-/*
-    std::string addResLinkerDir(const std::string& resLibDir)
-    {
-        if (resLibDir.empty())
-            return "";
-        return m_switches.libDirs + libDir + " ";
-    }*/
+    /*
+        std::string addResLinkerDir(const std::string& resLibDir)
+        {
+            if (resLibDir.empty())
+                return "";
+            return m_switches.libDirs + libDir + " ";
+        }*/
 
-    std::string getName() const
-    {
+    std::string getName() const {
         return m_name;
     }
 
-    void process_3(Options& po, const CmdLineOptions& cl, BuildFileOptions& cfg)
-    {
+    void process_3(Options& po, const CmdLineOptions& cl, BuildFileOptions& cfg) {
         SetupHOptions sho(po["wxcfgsetuphfile"]);
 
         // FIXME: proper place of this would be in a first hook, say process_1();
-        if (cl.keyExists("--define-variable"))
-        {
+        if (cl.keyExists("--define-variable")) {
             std::string strDef = cl.keyValue("--define-variable");
             size_t sep = strDef.find("=");
-            if (sep != std::string::npos)
-            {
+            if (sep != std::string::npos) {
                 std::string key = strDef.substr(0, sep);
                 std::string val = strDef.substr(sep+1, strDef.size()-sep-1);
 
@@ -580,9 +525,7 @@ public:
                     sho[key] = true;
                 else if (val == "0" || val == "false")
                     sho[key] = false;
-            }
-            else
-            {
+            } else {
                 std::cout << g_tokError << "Failed to define a variable as '" << cl.keyValue("--define-variable") << "'." << std::endl;
                 std::cout << "The syntax is --define-variable=VARIABLENAME=VARIABLEVALUE" << std::endl;
                 exit(1);
@@ -629,79 +572,84 @@ public:
         po["LIB_BASENAME_BASE"] += po["WXDEBUGFLAG"] + cfg["WX_LIB_FLAVOUR"];
 
 
-        for (size_t i=0; i<cl.getLibs().size(); ++i)
-        {
+        for (size_t i=0; i<cl.getLibs().size(); ++i) {
             std::string lib = cl.getLibs()[i];
 
-            if (lib == "base")
-            {
-                po["__WXLIB_BASE_p"] = addLib(po["LIB_BASENAME_BASE"]);
-            }
-            else if (lib == "net")
-            {
-                po["__WXLIB_NET_p"] = addLib(po["LIB_BASENAME_BASE"] + "_net");
-            }
-            else if (lib == "xml")
-            {
-                po["__WXLIB_XML_p"] = addLib(po["LIB_BASENAME_BASE"] + "_xml");
-            }
-            else if (lib == "core")
-            {
-                po["__WXLIB_CORE_p"] = addLib(po["LIB_BASENAME_MSW"] + "_core");
-            }
-            else if (lib == "adv")
-            {
-                po["__WXLIB_ADV_p"] = addLib(po["LIB_BASENAME_MSW"] + "_adv");
-            }
-            else if (lib == "rich")
-            {
-                po["__WXLIB_RICH_p"] = addLib(po["LIB_BASENAME_MSW"] + "_richtext");
-            }
-            else if (lib == "qa")
-            {
-                po["__WXLIB_QA_p"] = addLib(po["LIB_BASENAME_MSW"] + "_qa");
-                po["__WXLIB_CORE_p"] = addLib(po["LIB_BASENAME_MSW"] + "_core");
-                po["__WXLIB_XML_p"] = addLib(po["LIB_BASENAME_BASE"] + "_xml");
-            }
-            else if (lib == "xrc")
-            {
-                po["__WXLIB_XRC_p"] = addLib(po["LIB_BASENAME_MSW"] + "_xrc");
-                po["__WXLIB_XML_p"] = addLib(po["LIB_BASENAME_BASE"] + "_xml");
-                po["__WXLIB_ADV_p"] = addLib(po["LIB_BASENAME_MSW"] + "_adv");
-                po["__WXLIB_HTML_p"] = addLib(po["LIB_BASENAME_MSW"] + "_html");
-            }
-            else if (lib == "aui")
-            {
-                po["__WXLIB_AUI_p"] = addLib(po["LIB_BASENAME_MSW"] + "_aui");
-            }
-            else if (lib == "html")
-            {
-                po["__WXLIB_HTML_p"] = addLib(po["LIB_BASENAME_MSW"] + "_html");
-            }
-            else if (lib == "media")
-            {
-                po["__WXLIB_MEDIA_p"] = addLib(po["LIB_BASENAME_MSW"] + "_media");
-            }
-            else if (lib == "odbc")
-            {
-                po["__WXLIB_ODBC_p"] = addLib(po["LIB_BASENAME_BASE"] + "_odbc");
-            }
-            else if (lib == "dbgrid")
-            {
-                po["__WXLIB_DBGRID_p"] = addLib(po["LIB_BASENAME_MSW"] + "_dbgrid");
-                po["__WXLIB_ODBC_p"] = addLib(po["LIB_BASENAME_BASE"] + "_odbc");
-                po["__WXLIB_ADV_p"] = addLib(po["LIB_BASENAME_MSW"] + "_adv");
-            }
-            else if (lib == "opengl" || lib == "gl")
-            {
-                // TODO: it's opengl or gl?
-                /// Doesn't matter if it's monolithic or not
-                po["__WXLIB_OPENGL_p"]  = addLib(po["LIB_BASENAME_MSW"] + "_gl");
+            if (lib == "base") {
+                if (cfg["MONOLITHIC"] == "0")
+                    po["__WXLIB_BASE_p"] = addLib(po["LIB_BASENAME_BASE"]);
+            } else if (lib == "net") {
+                if (cfg["MONOLITHIC"] == "0")
+                    po["__WXLIB_NET_p"] = addLib(po["LIB_BASENAME_BASE"] + "_net");
+            } else if (lib == "xml") {
+                if (cfg["MONOLITHIC"] == "0")
+                    po["__WXLIB_XML_p"] = addLib(po["LIB_BASENAME_BASE"] + "_xml");
+            } else if (lib == "core") {
+                if (cfg["MONOLITHIC"] == "0")
+                    if (cfg["USE_GUI"] == "1")
+                        po["__WXLIB_CORE_p"] = addLib(po["LIB_BASENAME_MSW"] + "_core");
+            } else if (lib == "adv") {
+                if (cfg["MONOLITHIC"] == "0")
+                    if (cfg["USE_GUI"] == "1")
+                        po["__WXLIB_ADV_p"] = addLib(po["LIB_BASENAME_MSW"] + "_adv");
+            } else if (lib == "rich") {
+                if (cfg["MONOLITHIC"] == "0")
+                    if (cfg["USE_GUI"] == "1")
+                        po["__WXLIB_RICH_p"] = addLib(po["LIB_BASENAME_MSW"] + "_richtext");
+            } else if (lib == "qa") {
+                if (cfg["MONOLITHIC"] == "0") {
+                    if (cfg["USE_GUI"] == "1") {
+                        if (cfg["USE_QA"] == "1") {
+                            po["__WXLIB_QA_p"] = addLib(po["LIB_BASENAME_MSW"] + "_qa");
+                            po["__WXLIB_CORE_p"] = addLib(po["LIB_BASENAME_MSW"] + "_core");
+                            po["__WXLIB_XML_p"] = addLib(po["LIB_BASENAME_BASE"] + "_xml");
+                        }
+                    }
+                }
+            } else if (lib == "xrc") {
+                if (cfg["MONOLITHIC"] == "0") {
+                    if (cfg["USE_GUI"] == "1") {
+                        po["__WXLIB_XRC_p"] = addLib(po["LIB_BASENAME_MSW"] + "_xrc");
+                        po["__WXLIB_XML_p"] = addLib(po["LIB_BASENAME_BASE"] + "_xml");
+                        po["__WXLIB_ADV_p"] = addLib(po["LIB_BASENAME_MSW"] + "_adv");
+                        po["__WXLIB_HTML_p"] = addLib(po["LIB_BASENAME_MSW"] + "_html");
+                    }
+                }
+            } else if (lib == "aui") {
+                if (cfg["MONOLITHIC"] == "0")
+                    if (cfg["USE_GUI"] == "1")
+                        po["__WXLIB_AUI_p"] = addLib(po["LIB_BASENAME_MSW"] + "_aui");
+            } else if (lib == "html") {
+                if (cfg["MONOLITHIC"] == "0")
+                    if (cfg["USE_GUI"] == "1")
+                        po["__WXLIB_HTML_p"] = addLib(po["LIB_BASENAME_MSW"] + "_html");
+            } else if (lib == "media") {
+                if (cfg["MONOLITHIC"] == "0")
+                    if (cfg["USE_GUI"] == "1")
+                        po["__WXLIB_MEDIA_p"] = addLib(po["LIB_BASENAME_MSW"] + "_media");
+            } else if (lib == "odbc") {
+                if (cfg["MONOLITHIC"] == "0")
+                    if (sho["wxUSE_ODBC"])
+                        po["__WXLIB_ODBC_p"] = addLib(po["LIB_BASENAME_BASE"] + "_odbc");
+            } else if (lib == "dbgrid") {
+                if (cfg["MONOLITHIC"] == "0") {
+                    if (cfg["USE_GUI"] == "1") {
+                        if (sho["wxUSE_ODBC"]) {
+                            po["__WXLIB_DBGRID_p"] = addLib(po["LIB_BASENAME_MSW"] + "_dbgrid");
+                            po["__WXLIB_ODBC_p"] = addLib(po["LIB_BASENAME_BASE"] + "_odbc");
+                            po["__WXLIB_ADV_p"] = addLib(po["LIB_BASENAME_MSW"] + "_adv");
+                        }
+                    }
+                }
+            } else if (lib == "opengl" || lib == "gl") {
+                if (cfg["USE_OPENGL"] == "1")
+                    if (cfg["USE_GUI"] == "1")
+                        // TODO: it's opengl or gl?
+                        /// Doesn't matter if it's monolithic or not
+                        po["__WXLIB_OPENGL_p"]  = addLib(po["LIB_BASENAME_MSW"] + "_gl");
                 po["__WXLIB_OPENGL_p"] += addLib("opengl32");
                 po["__WXLIB_OPENGL_p"] += addLib("glu32");
-            }
-            else
-            {
+            } else {
                 /// Doesn't matter if it's monolithic or not
                 po["__WXLIB_ARGS_p"] += addLib(po["LIB_BASENAME_MSW"] + "_" + lib);
             }
@@ -783,41 +731,40 @@ public:
             po["__LIB_ODBC32_p"] = addLib("odbc32");
 
 
-/*      TODO: From BAKEFILE
-        <!-- link-in system libs that wx depends on: -->
-        <!-- If on borland, we don't need to do much            -->
-        <if cond="FORMAT=='borland'">
-            <sys-lib>ole2w32</sys-lib>
-            <sys-lib>odbc32</sys-lib>
-        </if>
+        /*      TODO: From BAKEFILE
+                <!-- link-in system libs that wx depends on: -->
+                <!-- If on borland, we don't need to do much            -->
+                <if cond="FORMAT=='borland'">
+                    <sys-lib>ole2w32</sys-lib>
+                    <sys-lib>odbc32</sys-lib>
+                </if>
 
-        <!-- Non-borland, on the other hand...                  -->
-        <if cond="FORMAT not in ['borland','msevc4prj']">
-            <sys-lib>kernel32</sys-lib>
-            <sys-lib>user32</sys-lib>
-            <sys-lib>gdi32</sys-lib>
-            <sys-lib>comdlg32</sys-lib>
-            <sys-lib>winspool</sys-lib>
-            <sys-lib>winmm</sys-lib>
-            <sys-lib>shell32</sys-lib>
-            <sys-lib>comctl32</sys-lib>
-            <sys-lib>ole32</sys-lib>
-            <sys-lib>oleaut32</sys-lib>
-            <sys-lib>uuid</sys-lib>
-            <sys-lib>rpcrt4</sys-lib>
-            <sys-lib>advapi32</sys-lib>
-            <sys-lib>wsock32</sys-lib>
-            <sys-lib>odbc32</sys-lib>
-        </if>
+                <!-- Non-borland, on the other hand...                  -->
+                <if cond="FORMAT not in ['borland','msevc4prj']">
+                    <sys-lib>kernel32</sys-lib>
+                    <sys-lib>user32</sys-lib>
+                    <sys-lib>gdi32</sys-lib>
+                    <sys-lib>comdlg32</sys-lib>
+                    <sys-lib>winspool</sys-lib>
+                    <sys-lib>winmm</sys-lib>
+                    <sys-lib>shell32</sys-lib>
+                    <sys-lib>comctl32</sys-lib>
+                    <sys-lib>ole32</sys-lib>
+                    <sys-lib>oleaut32</sys-lib>
+                    <sys-lib>uuid</sys-lib>
+                    <sys-lib>rpcrt4</sys-lib>
+                    <sys-lib>advapi32</sys-lib>
+                    <sys-lib>wsock32</sys-lib>
+                    <sys-lib>odbc32</sys-lib>
+                </if>
 
-        <!-- Libs common to both borland and MSVC               -->
-        <if cond="FORMAT=='msvc' or FORMAT=='msvc6prj' or FORMAT=='borland'">
-            <sys-lib>oleacc</sys-lib>
-*/
+                <!-- Libs common to both borland and MSVC               -->
+                <if cond="FORMAT=='msvc' or FORMAT=='msvc6prj' or FORMAT=='borland'">
+                    <sys-lib>oleacc</sys-lib>
+        */
     }
 
-    std::string getAllLibs(Options& po)
-    {
+    std::string getAllLibs(Options& po) {
         std::string libs;
         libs += po["__WXLIB_ARGS_p"] + po["__WXLIB_OPENGL_p"] + po["__WXLIB_MEDIA_p"];
         libs += po["__WXLIB_DBGRID_p"] + po["__WXLIB_ODBC_p"] + po["__WXLIB_XRC_p"];
@@ -838,10 +785,8 @@ public:
         return libs;
     }
 
-    void getVariablesValues(Options& po, const CmdLineOptions& cl, BuildFileOptions& cfg)
-    {
-        if (cl.keyExists("--variable"))
-        {
+    void getVariablesValues(Options& po, const CmdLineOptions& cl, BuildFileOptions& cfg) {
+        if (cl.keyExists("--variable")) {
             std::string var = cl.keyValue("--variable");
 
             if (po.keyExists(var))
@@ -869,8 +814,7 @@ protected:
 class CompilerMinGW : public Compiler
 {
 public:
-    CompilerMinGW() : Compiler("gcc")
-    {
+    CompilerMinGW() : Compiler("gcc") {
         m_programs.cc = "mingw32-gcc";
         m_programs.cxx = "mingw32-g++";
         m_programs.ld = "mingw32-g++ -shared -fPIC -o ";
@@ -894,8 +838,7 @@ public:
         m_switches.PCHExtension = "h.gch";
     }
 
-    void process(Options& po, const CmdLineOptions& cl)
-    {
+    void process(Options& po, const CmdLineOptions& cl) {
         /// Searchs for '<prefix>\build\msw\config.*' first
         std::string cfg_first = po["prefix"] + "\\build\\msw\\config." + getName();
 
@@ -1084,7 +1027,7 @@ public:
         po["libs"] += addLib("kernel32") + addLib("user32") + addLib("gdi32") + addLib("comdlg32") + addLib("winspool");
         po["libs"] += addLib("winmm") + addLib("shell32") + addLib("comctl32") + addLib("ole32") + addLib("oleaut32");
         po["libs"] += addLib("uuid") + addLib("rpcrt4") + addLib("advapi32") + addLib("wsock32") + addLib("odbc32");
-*/
+        */
         po["rcflags"]  = addFlag("--use-temp-file") + addResDefine("__WXMSW__") + po["__WXUNIV_DEFINE_p_1"];
         po["rcflags"] += po["__DEBUG_DEFINE_p_1"] + po["__EXCEPTIONS_DEFINE_p_1"];
         po["rcflags"] += po["__RTTI_DEFINE_p_1"] + po["__THREAD_DEFINE_p_1"] + po["__UNICODE_DEFINE_p_1"];
@@ -1111,8 +1054,7 @@ public:
 class CompilerDMC : public Compiler
 {
 public:
-    CompilerDMC() : Compiler("dmc")
-    {
+    CompilerDMC() : Compiler("dmc") {
         m_programs.cc = "dmc";
         m_programs.cxx = "dmc";
         m_programs.ld = "link";
@@ -1135,8 +1077,7 @@ public:
     }
 
 
-    void process(Options& po, const CmdLineOptions& cl)
-    {
+    void process(Options& po, const CmdLineOptions& cl) {
         /// Searchs for '<prefix>\build\msw\config.*' first
         std::string cfg_first = po["prefix"] + "\\build\\msw\\config." + getName();
 
@@ -1211,43 +1152,43 @@ public:
 
         if (cfg["DEBUG_INFO"] == "1")
             po["__DEBUGINFO_1"] = addFlag("/DEBUG /CODEVIEW");
-/*
-        if (cfg["BUILD"] == "debug" && cfg["DEBUG_RUNTIME_LIBS"] == "default")
-            po["____DEBUGRUNTIME_2_p"] = addDefine("_DEBUG");
+        /*
+                if (cfg["BUILD"] == "debug" && cfg["DEBUG_RUNTIME_LIBS"] == "default")
+                    po["____DEBUGRUNTIME_2_p"] = addDefine("_DEBUG");
 
-        if (cfg["BUILD"] == "release" && cfg["DEBUG_RUNTIME_LIBS"] == "default")
-            po["____DEBUGRUNTIME_2_p"] = addDefine("");
+                if (cfg["BUILD"] == "release" && cfg["DEBUG_RUNTIME_LIBS"] == "default")
+                    po["____DEBUGRUNTIME_2_p"] = addDefine("");
 
-        if (cfg["DEBUG_RUNTIME_LIBS"] == "0")
-            po["____DEBUGRUNTIME_2_p"] = addDefine("");
+                if (cfg["DEBUG_RUNTIME_LIBS"] == "0")
+                    po["____DEBUGRUNTIME_2_p"] = addDefine("");
 
-        if (cfg["DEBUG_RUNTIME_LIBS"] == "1")
-            po["____DEBUGRUNTIME_2_p"] = addDefine("_DEBUG");
+                if (cfg["DEBUG_RUNTIME_LIBS"] == "1")
+                    po["____DEBUGRUNTIME_2_p"] = addDefine("_DEBUG");
 
-        if (cfg["BUILD"] == "debug" && cfg["DEBUG_RUNTIME_LIBS"] == "default")
-            po["____DEBUGRUNTIME_2_p_1"] = addResDefine("_DEBUG");
+                if (cfg["BUILD"] == "debug" && cfg["DEBUG_RUNTIME_LIBS"] == "default")
+                    po["____DEBUGRUNTIME_2_p_1"] = addResDefine("_DEBUG");
 
-        if (cfg["BUILD"] == "release" && cfg["DEBUG_RUNTIME_LIBS"] == "default")
-            po["____DEBUGRUNTIME_2_p_1"] = addResDefine("");
+                if (cfg["BUILD"] == "release" && cfg["DEBUG_RUNTIME_LIBS"] == "default")
+                    po["____DEBUGRUNTIME_2_p_1"] = addResDefine("");
 
-        if (cfg["DEBUG_RUNTIME_LIBS"] == "0")
-            po["____DEBUGRUNTIME_2_p_1"] = addResDefine("");
+                if (cfg["DEBUG_RUNTIME_LIBS"] == "0")
+                    po["____DEBUGRUNTIME_2_p_1"] = addResDefine("");
 
-        if (cfg["DEBUG_RUNTIME_LIBS"] == "1")
-            po["____DEBUGRUNTIME_2_p_1"] = addResDefine("_DEBUG");
+                if (cfg["DEBUG_RUNTIME_LIBS"] == "1")
+                    po["____DEBUGRUNTIME_2_p_1"] = addResDefine("_DEBUG");
 
-        if (cfg["BUILD"] == "debug" && cfg["DEBUG_RUNTIME_LIBS"] == "default")
-            po["__DEBUGRUNTIME_3"] = "d";
+                if (cfg["BUILD"] == "debug" && cfg["DEBUG_RUNTIME_LIBS"] == "default")
+                    po["__DEBUGRUNTIME_3"] = "d";
 
-        if (cfg["BUILD"] == "release" && cfg["DEBUG_RUNTIME_LIBS"] == "default")
-            po["__DEBUGRUNTIME_3"] = "";
+                if (cfg["BUILD"] == "release" && cfg["DEBUG_RUNTIME_LIBS"] == "default")
+                    po["__DEBUGRUNTIME_3"] = "";
 
-        if (cfg["DEBUG_RUNTIME_LIBS"] == "0")
-            po["__DEBUGRUNTIME_3"] = "";
+                if (cfg["DEBUG_RUNTIME_LIBS"] == "0")
+                    po["__DEBUGRUNTIME_3"] = "";
 
-        if (cfg["DEBUG_RUNTIME_LIBS"] == "1")
-            po["__DEBUGRUNTIME_3"] = "d";
-*/
+                if (cfg["DEBUG_RUNTIME_LIBS"] == "1")
+                    po["__DEBUGRUNTIME_3"] = "d";
+        */
 //----------------------------------------------------
 
         if (cfg["BUILD"] == "debug")
@@ -1255,13 +1196,13 @@ public:
 
         if (cfg["BUILD"] == "release")
             po["__OPTIMIZEFLAG_4"] = addFlag("-o");//2
-/*
-        if (cfg["USE_THREADS"] == "0")
-            po["__THREADSFLAG_7"] = "L";
+        /*
+                if (cfg["USE_THREADS"] == "0")
+                    po["__THREADSFLAG_7"] = "L";
 
-        if (cfg["USE_THREADS"] == "1")
-            po["__THREADSFLAG_7"] = "T";
-*/
+                if (cfg["USE_THREADS"] == "1")
+                    po["__THREADSFLAG_7"] = "T";
+        */
         if (cfg["RUNTIME_LIBS"] == "dynamic")
             po["__RUNTIME_LIBS_8"] = "-ND";//5 // TODO: addFlag?
 
@@ -1283,79 +1224,79 @@ public:
             po["__EXCEPTIONSFLAG_10"] = addFlag("-Ae");//7
 
 //----------------------------------------------------
-/*
-        if (cfg["BUILD"] == "debug" && cfg["DEBUG_RUNTIME_LIBS"] == "0")
-            po["__NO_VC_CRTDBG_p"] = addDefine("__NO_VC_CRTDBG__");
+        /*
+                if (cfg["BUILD"] == "debug" && cfg["DEBUG_RUNTIME_LIBS"] == "0")
+                    po["__NO_VC_CRTDBG_p"] = addDefine("__NO_VC_CRTDBG__");
 
-        if (cfg["BUILD"] == "release" && cfg["DEBUG_FLAG"] == "1")
-            po["__NO_VC_CRTDBG_p"] = addDefine("__NO_VC_CRTDBG__");
+                if (cfg["BUILD"] == "release" && cfg["DEBUG_FLAG"] == "1")
+                    po["__NO_VC_CRTDBG_p"] = addDefine("__NO_VC_CRTDBG__");
 
-        if (cfg["BUILD"] == "debug" && cfg["DEBUG_RUNTIME_LIBS"] == "0")
-            po["__NO_VC_CRTDBG_p_1"] = addResDefine("__NO_VC_CRTDBG__");
+                if (cfg["BUILD"] == "debug" && cfg["DEBUG_RUNTIME_LIBS"] == "0")
+                    po["__NO_VC_CRTDBG_p_1"] = addResDefine("__NO_VC_CRTDBG__");
 
-        if (cfg["BUILD"] == "release" && cfg["DEBUG_FLAG"] == "1")
-            po["__NO_VC_CRTDBG_p_1"] = addResDefine("__NO_VC_CRTDBG__");
-*/
+                if (cfg["BUILD"] == "release" && cfg["DEBUG_FLAG"] == "1")
+                    po["__NO_VC_CRTDBG_p_1"] = addResDefine("__NO_VC_CRTDBG__");
+        */
         if (cfg["WXUNIV"] == "1")
             po["__WXUNIV_DEFINE_p"] = addDefine("__WXUNIVERSAL__");
-/*
-        if (cfg["WXUNIV"] == "1")
-            po["__WXUNIV_DEFINE_p_1"] = addResDefine("__WXUNIVERSAL__");
-*/
+        /*
+                if (cfg["WXUNIV"] == "1")
+                    po["__WXUNIV_DEFINE_p_1"] = addResDefine("__WXUNIVERSAL__");
+        */
         if (cfg["BUILD"] == "debug")
             po["__DEBUG_DEFINE_p"] = addDefine("__WXDEBUG__");
 
 //        if (cfg["DEBUG_FLAG"] == "1")
 //            po["__DEBUG_DEFINE_p"] = addDefine("__WXDEBUG__");
-/*
-        if (cfg["BUILD"] == "debug" && cfg["DEBUG_FLAG"] == "default")
-            po["__DEBUG_DEFINE_p_1"] = addResDefine("__WXDEBUG__");
+        /*
+                if (cfg["BUILD"] == "debug" && cfg["DEBUG_FLAG"] == "default")
+                    po["__DEBUG_DEFINE_p_1"] = addResDefine("__WXDEBUG__");
 
-        if (cfg["DEBUG_FLAG"] == "1")
-            po["__DEBUG_DEFINE_p_1"] = addResDefine("__WXDEBUG__");
-*/
+                if (cfg["DEBUG_FLAG"] == "1")
+                    po["__DEBUG_DEFINE_p_1"] = addResDefine("__WXDEBUG__");
+        */
         if (cfg["USE_EXCEPTIONS"] == "0")
             po["__EXCEPTIONS_DEFINE_p"] = addDefine("wxNO_EXCEPTIONS");
-/*
-        if (cfg["USE_EXCEPTIONS"] == "0")
-            po["__EXCEPTIONS_DEFINE_p_1"] = addResDefine("wxNO_EXCEPTIONS");
-*/
+        /*
+                if (cfg["USE_EXCEPTIONS"] == "0")
+                    po["__EXCEPTIONS_DEFINE_p_1"] = addResDefine("wxNO_EXCEPTIONS");
+        */
         if (cfg["USE_RTTI"] == "0")
             po["__RTTI_DEFINE_p"] = addDefine("wxNO_RTTI");
-/*
-        if (cfg["USE_RTTI"] == "0")
-            po["__RTTI_DEFINE_p_1"] = addResDefine("wxNO_RTTI");
-*/
+        /*
+                if (cfg["USE_RTTI"] == "0")
+                    po["__RTTI_DEFINE_p_1"] = addResDefine("wxNO_RTTI");
+        */
         if (cfg["USE_THREADS"] == "0")
             po["__THREAD_DEFINE_p"] = addDefine("wxNO_THREADS");
-/*
-        if (cfg["USE_THREADS"] == "0")
-            po["__THREAD_DEFINE_p_1"] = addResDefine("wxNO_THREADS");
-*/
+        /*
+                if (cfg["USE_THREADS"] == "0")
+                    po["__THREAD_DEFINE_p_1"] = addResDefine("wxNO_THREADS");
+        */
         if (cfg["UNICODE"] == "1")
             po["__UNICODE_DEFINE_p"] = addDefine("_UNICODE");
-/*
-        if (cfg["UNICODE"] == "1")
-            po["__UNICODE_DEFINE_p_1"] = addResDefine("_UNICODE");
-*/
+        /*
+                if (cfg["UNICODE"] == "1")
+                    po["__UNICODE_DEFINE_p_1"] = addResDefine("_UNICODE");
+        */
         if (cfg["MSLU"] == "1")
             po["__MSLU_DEFINE_p"] = addDefine("wxUSE_UNICODE_MSLU=1");
-/*
-        if (cfg["MSLU"] == "1")
-            po["__MSLU_DEFINE_p_1"] = addResDefine("wxUSE_UNICODE_MSLU=1");
-*/
+        /*
+                if (cfg["MSLU"] == "1")
+                    po["__MSLU_DEFINE_p_1"] = addResDefine("wxUSE_UNICODE_MSLU=1");
+        */
         if (cfg["USE_GDIPLUS"] == "1")
             po["__GFXCTX_DEFINE_p"] = addDefine("wxUSE_GRAPHICS_CONTEXT=1");
-/*
-        if (cfg["USE_GDIPLUS"] == "1")
-            po["__GFXCTX_DEFINE_p_1"] = addResDefine("wxUSE_GRAPHICS_CONTEXT=1");
-*/
+        /*
+                if (cfg["USE_GDIPLUS"] == "1")
+                    po["__GFXCTX_DEFINE_p_1"] = addResDefine("wxUSE_GRAPHICS_CONTEXT=1");
+        */
         if (cfg["SHARED"] == "1")
             po["__DLLFLAG_p"] = addDefine("WXUSINGDLL");
-/*
-        if (cfg["SHARED"] == "1")
-            po["__DLLFLAG_p_1"] = addResDefine("WXUSINGDLL");
-*/
+        /*
+                if (cfg["SHARED"] == "1")
+                    po["__DLLFLAG_p_1"] = addResDefine("WXUSINGDLL");
+        */
         process_3(po, cl, cfg);
 
 
@@ -1415,8 +1356,7 @@ public:
 class CompilerVC : public Compiler
 {
 public:
-    CompilerVC() : Compiler("vc")
-    {
+    CompilerVC() : Compiler("vc") {
         m_programs.cc = "cl";
         m_programs.cxx = "cl";
         m_programs.ld = "link";
@@ -1438,8 +1378,7 @@ public:
         m_switches.linkerNeedsLibExtension = true;
     }
 
-    void process(Options& po, const CmdLineOptions& cl)
-    {
+    void process(Options& po, const CmdLineOptions& cl) {
         /// Searchs for '<prefix>\build\msw\config.*' first
         std::string cfg_first = po["prefix"] + "\\build\\msw\\config." + getName();
 
@@ -1727,8 +1666,7 @@ public:
 class CompilerWAT : public Compiler
 {
 public:
-    CompilerWAT() : Compiler("wat")
-    {
+    CompilerWAT() : Compiler("wat") {
         m_programs.cc = "wcl386";//TODO: wcc386
         m_programs.cxx = "wcl386";//TODO: wpp386
         m_programs.ld = "wcl386";
@@ -1750,8 +1688,7 @@ public:
         m_switches.linkerNeedsLibExtension = true;
     }
 
-    void process(Options& po, const CmdLineOptions& cl)
-    {
+    void process(Options& po, const CmdLineOptions& cl) {
         /// Searchs for '<prefix>\build\msw\config.*' first
         std::string cfg_first = po["prefix"] + "\\build\\msw\\config." + getName();
 
@@ -1941,8 +1878,7 @@ public:
 class CompilerBCC : public Compiler
 {
 public:
-    CompilerBCC() : Compiler("bcc")
-    {
+    CompilerBCC() : Compiler("bcc") {
         m_programs.cc = "bcc32";
         m_programs.cxx = "bcc32";
         m_programs.ld = "ilink32";
@@ -2002,11 +1938,9 @@ bool replaceCompilerIfFound(std::string& wxcfg, const std::string& compiler)
     compilers.push_back("wat_");
     compilers.push_back("bcc_");
 
-    for(std::vector<std::string>::const_iterator it = compilers.begin(); it != compilers.end(); ++it)
-    {
+    for(std::vector<std::string>::const_iterator it = compilers.begin(); it != compilers.end(); ++it) {
         loc = wxcfg.find(*it);
-        if (loc != std::string::npos)
-        {
+        if (loc != std::string::npos) {
             wxcfg.replace(loc, (*it).length(), compiler + "_");
             return true;
         }
@@ -2022,17 +1956,14 @@ bool replaceUniv(std::string& wxcfg, bool enable)
     const std::string univStr("univ");
     size_t univPos = wxcfg.rfind(univStr);
 
-    if (enable)
-    {
+    if (enable) {
         /// Pattern: Replace /(msw|base)/ to /(msw|base)univ/
-        if (univPos == std::string::npos)
-        {
+        if (univPos == std::string::npos) {
             const std::string mswStr("msw");
             size_t mswPos = wxcfg.rfind(mswStr);
             if (mswPos != std::string::npos)
                 wxcfg.insert(mswPos + mswStr.length(), univStr);
-            else
-            {
+            else {
                 const std::string baseStr("base");
                 size_t basePos = wxcfg.rfind(baseStr);
                 if (basePos != std::string::npos)
@@ -2040,12 +1971,9 @@ bool replaceUniv(std::string& wxcfg, bool enable)
             }
             return true;
         }
-    }
-    else
-    {
+    } else {
         /// Pattern: Remove /univ/ in /(msw|base)univ/
-        if (univPos != std::string::npos)
-        {
+        if (univPos != std::string::npos) {
             wxcfg.erase(univPos, univStr.length());
             return true;
         }
@@ -2060,32 +1988,23 @@ bool replaceUnicode(std::string& wxcfg, bool enable)
 {
     std::string::iterator lastChar = wxcfg.end() - 1;
 
-    if (enable)
-    {
+    if (enable) {
         /// Pattern: Add /.*u/ if it's not already or /.*ud/ if --debug is specified
         // TODO: string::find could be better
-        if (*lastChar != 'u' && *lastChar != 'd')
-        {
+        if (*lastChar != 'u' && *lastChar != 'd') {
             wxcfg += "u";
             return true;
-        }
-        else if (*(lastChar - 1) != 'u' && *lastChar == 'd')
-        {
+        } else if (*(lastChar - 1) != 'u' && *lastChar == 'd') {
             *lastChar = 'u';
             wxcfg += "d";
             return true;
         }
-    }
-    else
-    {
+    } else {
         /// Pattern: Remove /.*u/ if it's present or /.*ud/ if --debug is specified
-        if (*lastChar == 'u')
-        {
+        if (*lastChar == 'u') {
             wxcfg.erase(lastChar);
             return true;
-        }
-        else if (*(lastChar - 1) == 'u' && *lastChar == 'd')
-        {
+        } else if (*(lastChar - 1) == 'u' && *lastChar == 'd') {
             wxcfg.erase(lastChar - 1);
             return true;
         }
@@ -2100,20 +2019,15 @@ bool replaceDebug(std::string& wxcfg, bool enable)
 {
     std::string::iterator lastChar = wxcfg.end() - 1;
 
-    if (enable)
-    {
+    if (enable) {
         /// Pattern: Add /.*d/ if it's not already
-        if (*lastChar != 'd')
-        {
+        if (*lastChar != 'd') {
             wxcfg += "d";
             return true;
         }
-    }
-    else
-    {
+    } else {
         /// Pattern: Remove /.*d/ if it's present
-        if (*lastChar == 'd')
-        {
+        if (*lastChar == 'd') {
             wxcfg.erase(lastChar);
             return true;
         }
@@ -2126,22 +2040,17 @@ bool replaceDebug(std::string& wxcfg, bool enable)
 /// Return true if string changed
 bool replaceStatic(std::string& wxcfg, bool enable)
 {
-    if (enable)
-    {
+    if (enable) {
         /// Pattern: Replace /.*_dll/ to /.*_lib/
         size_t loc = wxcfg.find("_dll");
-        if (loc != std::string::npos)
-        {
+        if (loc != std::string::npos) {
             wxcfg.replace(loc, std::string("_lib").length(), "_lib");
             return true;
         }
-    }
-    else
-    {
+    } else {
         /// Pattern: Replace /.*_lib/ to /.*_dll/
         size_t loc = wxcfg.find("_lib");
-        if (loc != std::string::npos)
-        {
+        if (loc != std::string::npos) {
             wxcfg.replace(loc, std::string("_dll").length(), "_dll");
             return true;
         }
@@ -2162,8 +2071,7 @@ void autodetectConfiguration(Options& po, const CmdLineOptions& cl)
 
     // Iterate through the options the user didn't supply
     cfgs.push_back(po["wxcfg"]);
-    if (!cl.keyExists("--universal"))
-    {
+    if (!cl.keyExists("--universal")) {
         cfg = po["wxcfg"];
         if (replaceUniv(cfg, true))
             cfgs.push_back(cfg);
@@ -2171,11 +2079,9 @@ void autodetectConfiguration(Options& po, const CmdLineOptions& cl)
         if (replaceUniv(cfg, false))
             cfgs.push_back(cfg);
     }
-    if (!cl.keyExists("--unicode"))
-    {
+    if (!cl.keyExists("--unicode")) {
         newCfgs.clear();
-        for (curCfg = cfgs.begin(); curCfg != cfgs.end(); ++curCfg)
-        {
+        for (curCfg = cfgs.begin(); curCfg != cfgs.end(); ++curCfg) {
             cfg = *curCfg;
             if (replaceUnicode(cfg, true))
                 newCfgs.push_back(cfg);
@@ -2184,13 +2090,11 @@ void autodetectConfiguration(Options& po, const CmdLineOptions& cl)
                 newCfgs.push_back(cfg);
         }
         for (curCfg = newCfgs.begin(); curCfg != newCfgs.end(); ++curCfg)
-           cfgs.push_back(*curCfg);
+            cfgs.push_back(*curCfg);
     }
-    if (!cl.keyExists("--debug"))
-    {
+    if (!cl.keyExists("--debug")) {
         newCfgs.clear();
-        for (curCfg = cfgs.begin(); curCfg != cfgs.end(); ++curCfg)
-        {
+        for (curCfg = cfgs.begin(); curCfg != cfgs.end(); ++curCfg) {
             cfg = *curCfg;
             if (replaceDebug(cfg, true))
                 newCfgs.push_back(cfg);
@@ -2199,13 +2103,11 @@ void autodetectConfiguration(Options& po, const CmdLineOptions& cl)
                 newCfgs.push_back(cfg);
         }
         for (curCfg = newCfgs.begin(); curCfg != newCfgs.end(); ++curCfg)
-           cfgs.push_back(*curCfg);
+            cfgs.push_back(*curCfg);
     }
-    if (!cl.keyExists("--static"))
-    {
+    if (!cl.keyExists("--static")) {
         newCfgs.clear();
-        for (curCfg = cfgs.begin(); curCfg != cfgs.end(); ++curCfg)
-        {
+        for (curCfg = cfgs.begin(); curCfg != cfgs.end(); ++curCfg) {
             cfg = *curCfg;
             if (replaceStatic(cfg, true))
                 newCfgs.push_back(cfg);
@@ -2214,49 +2116,42 @@ void autodetectConfiguration(Options& po, const CmdLineOptions& cl)
                 newCfgs.push_back(cfg);
         }
         for (curCfg = newCfgs.begin(); curCfg != newCfgs.end(); ++curCfg)
-           cfgs.push_back(*curCfg);
+            cfgs.push_back(*curCfg);
     }
-    if (!cl.keyExists("--compiler"))
-    {
-       newCfgs.clear();
-       for (curCfg = cfgs.begin(); curCfg != cfgs.end(); ++curCfg)
-       {
-           cfg = *curCfg;
-           if (replaceCompilerIfFound(cfg, "gcc"))
-               newCfgs.push_back(cfg);
-           cfg = *curCfg;
-           if (replaceCompilerIfFound(cfg, "dmc"))
-               newCfgs.push_back(cfg);
-           cfg = *curCfg;
-           if (replaceCompilerIfFound(cfg, "vc"))
-               newCfgs.push_back(cfg);
-           cfg = *curCfg;
-           if (replaceCompilerIfFound(cfg, "wat"))
-               newCfgs.push_back(cfg);
-           cfg = *curCfg;
-           if (replaceCompilerIfFound(cfg, "bcc"))
-               newCfgs.push_back(cfg);
-       }
-       for (curCfg = newCfgs.begin(); curCfg != newCfgs.end(); ++curCfg)
-          cfgs.push_back(*curCfg);
+    if (!cl.keyExists("--compiler")) {
+        newCfgs.clear();
+        for (curCfg = cfgs.begin(); curCfg != cfgs.end(); ++curCfg) {
+            cfg = *curCfg;
+            if (replaceCompilerIfFound(cfg, "gcc"))
+                newCfgs.push_back(cfg);
+            cfg = *curCfg;
+            if (replaceCompilerIfFound(cfg, "dmc"))
+                newCfgs.push_back(cfg);
+            cfg = *curCfg;
+            if (replaceCompilerIfFound(cfg, "vc"))
+                newCfgs.push_back(cfg);
+            cfg = *curCfg;
+            if (replaceCompilerIfFound(cfg, "wat"))
+                newCfgs.push_back(cfg);
+            cfg = *curCfg;
+            if (replaceCompilerIfFound(cfg, "bcc"))
+                newCfgs.push_back(cfg);
+        }
+        for (curCfg = newCfgs.begin(); curCfg != newCfgs.end(); ++curCfg)
+            cfgs.push_back(*curCfg);
     }
 
 
     // reads the first setup.h it founds
     bool found = false;
-    for(std::vector<std::string>::const_iterator it = cfgs.begin(); it != cfgs.end(); ++it)
-    {
+    for(std::vector<std::string>::const_iterator it = cfgs.begin(); it != cfgs.end(); ++it) {
         std::string file = po["prefix"] + "\\lib\\" + *it + "\\wx\\setup.h";
         std::ifstream setupH(file.c_str());
-        if (setupH.is_open())
-        {
-            if (!found)
-            {
+        if (setupH.is_open()) {
+            if (!found) {
                 po["wxcfg"] = *it;
                 found = true;
-            }
-            else
-            {
+            } else {
                 std::cerr << g_tokWarning << "Multiple compiled configurations of wxWidgets have been detected." << std::endl;
                 std::cerr << "Using first detected version by default." << std::endl;
                 std::cerr << std::endl;
@@ -2268,8 +2163,7 @@ void autodetectConfiguration(Options& po, const CmdLineOptions& cl)
         }
     }
 
-    if (!po.keyExists("wxcfg"))
-    {
+    if (!po.keyExists("wxcfg")) {
         // TODO: this never reaches thanks to the new autodetection algorithm
 
         std::cout << g_tokError << "No setup.h file has been auto-detected." << std::endl;
@@ -2289,40 +2183,35 @@ void checkAdditionalFlags(Options& po, const CmdLineOptions& cl)
     /// Modifies wxcfg as 'vc[cpu]_[dll|lib][CFG]\[msw|base][univ][u][d]' accordingly
     /// or 'gcc_[dll|lib][CFG]\[msw|base][univ][u][d]'
 
-    if (cl.keyExists("--universal"))
-    {
+    if (cl.keyExists("--universal")) {
         if (cl.keyValue("--universal") == "no")
             replaceUniv(po["wxcfg"], false);
         else if (cl.keyValue("--universal") == "yes" || cl.keyValue("--universal").empty())
             replaceUniv(po["wxcfg"], true);
-                }
+    }
 
-    if (cl.keyExists("--unicode"))
-    {
+    if (cl.keyExists("--unicode")) {
         if (cl.keyValue("--unicode") == "no")
             replaceUnicode(po["wxcfg"], false);
         else if (cl.keyValue("--unicode") == "yes" || cl.keyValue("--unicode").empty())
             replaceUnicode(po["wxcfg"], true);
-            }
+    }
 
-    if (cl.keyExists("--debug"))
-    {
+    if (cl.keyExists("--debug")) {
         if (cl.keyValue("--debug") == "no")
             replaceDebug(po["wxcfg"], false);
         else if (cl.keyValue("--debug") == "yes" || cl.keyValue("--debug").empty())
             replaceDebug(po["wxcfg"], true);
-        }
+    }
 
-    if (cl.keyExists("--static"))
-    {
+    if (cl.keyExists("--static")) {
         if (cl.keyValue("--static") == "no")
             replaceStatic(po["wxcfg"], false);
         else if (cl.keyValue("--static") == "yes" || cl.keyValue("--static").empty())
             replaceStatic(po["wxcfg"], true);
-        }
+    }
 
-    if (cl.keyExists("--compiler"))
-    {
+    if (cl.keyExists("--compiler")) {
         if (cl.keyValue("--compiler") == "gcc")
             replaceCompilerIfFound(po["wxcfg"], "gcc");
         else if (cl.keyValue("--compiler") == "dmc")
@@ -2345,38 +2234,27 @@ void detectCompiler(Options& po, const CmdLineOptions& cl)
     // gcc_dll\\mswud
     // vc_lib\\msw
 
-    if (po["wxcfg"].find("gcc_") != std::string::npos)
-    {
+    if (po["wxcfg"].find("gcc_") != std::string::npos) {
         CompilerMinGW compiler;
         compiler.process(po, cl);
         return;
-    }
-    else if (po["wxcfg"].find("dmc_") != std::string::npos)
-    {
+    } else if (po["wxcfg"].find("dmc_") != std::string::npos) {
         CompilerDMC compiler;
         compiler.process(po, cl);
         return;
-    }
-    else if (po["wxcfg"].find("vc_") != std::string::npos)
-    {
+    } else if (po["wxcfg"].find("vc_") != std::string::npos) {
         CompilerVC compiler;
         compiler.process(po, cl);
         return;
-    }
-    else if (po["wxcfg"].find("wat_") != std::string::npos)
-    {
+    } else if (po["wxcfg"].find("wat_") != std::string::npos) {
         CompilerWAT compiler;
         compiler.process(po, cl);
         return;
-    }
-    else if (po["wxcfg"].find("bcc_") != std::string::npos)
-    {
+    } else if (po["wxcfg"].find("bcc_") != std::string::npos) {
         CompilerBCC compiler;
         compiler.process(po, cl);
         return;
-    }
-    else
-    {
+    } else {
         // TODO: this never reaches thanks to the new autodetection algorithm
 
         std::cout << g_tokError << "No supported compiler has been detected in the configuration '" << po["wxcfg"] << "'." << std::endl;
@@ -2395,8 +2273,7 @@ void validatePrefix(const std::string& prefix)
     // tests if prefix is a valid dir. checking if there is an \include\wx\wx.h
     const std::string testfile = prefix + "\\include\\wx\\wx.h";
     std::ifstream prefixIsValid(testfile.c_str());
-    if (!prefixIsValid.is_open())
-    {
+    if (!prefixIsValid.is_open()) {
         std::cout << g_tokError << "wxWidgets hasn't been found installed at '" << prefix << "'." << std::endl;
         std::cerr << std::endl;
         std::cerr << "Please use the --prefix flag (as in wx-config --prefix=C:\\wxWidgets)" << std::endl;
@@ -2417,10 +2294,8 @@ bool validateConfiguration(const std::string& wxcfgfile, const std::string& wxcf
     bool isBuildCfgOpen = build_cfg.is_open();
     bool isSetupHOpen = setup_h.is_open();
 
-    if (!isBuildCfgOpen && exitIfError)
-    {
-        if (!isSetupHOpen && exitIfError)
-        {
+    if (!isBuildCfgOpen && exitIfError) {
+        if (!isSetupHOpen && exitIfError) {
             std::cout << g_tokError << "No valid setup.h of wxWidgets has been found at location: " << wxcfgsetuphfile << std::endl;
             std::cerr << std::endl;
             std::cerr << "Please use the --wxcfg flag (as in wx-config --wxcfg=gcc_dll\\mswud)" << std::endl;
@@ -2446,8 +2321,7 @@ bool validateConfiguration(const std::string& wxcfgfile, const std::string& wxcf
 void outputFlags(Options& po, const CmdLineOptions& cl)
 {
     /// Outputs flags to console
-    if (cl.keyExists("--variable"))
-    {
+    if (cl.keyExists("--variable")) {
         std::cout << po["variable"];
         exit(0);
     }
@@ -2505,8 +2379,7 @@ int main(int argc, char* argv[])
     if (!cl.validArgs())
         return 1;
 
-    if (cl.keyExists("-v"))
-    {
+    if (cl.keyExists("-v")) {
         std::cout << "wx-config revision " << getSvnRevision() << " " << getSvnDate() << std::endl;
         return 0;
     }
@@ -2517,8 +2390,7 @@ int main(int argc, char* argv[])
         po["prefix"] = cl["--prefix"];
     else if (getenv("WXWIN"))
         po["prefix"] = getenv("WXWIN");
-    else
-    {
+    else {
 #ifdef _WIN32
         /// Assume that, like a *nix, we're installed in C:\some\path\bin,
         /// and that the root dir of wxWidgets is therefore C:\some\path.
@@ -2528,15 +2400,13 @@ int main(int argc, char* argv[])
 
         /// Why, oh why, doesn't M$ give us a way to find the actual return length,
         /// like they do with everything else?!?
-        do
-        {
+        do {
             libPath = new CHAR[length];
             GetModuleFileName(NULL, libPath, length);
             GetFullPathName(libPath, length, libPath, &filePart);
             *filePart = '\0';
             // Add 3 for ".." and NULL
-            if (strlen(libPath) + 3 > length)
-            {
+            if (strlen(libPath) + 3 > length) {
                 length *= 2;
                 delete[] libPath;
                 libPath = NULL;
@@ -2561,8 +2431,7 @@ int main(int argc, char* argv[])
         po["wxcfg"] = cl["--wxcfg"];
     else if (getenv("WXCFG") && !cl.keyExists("--prefix"))
         po["wxcfg"] = getenv("WXCFG");
-    else
-    {
+    else {
         // Try if something valid can be found trough deriving checkAdditionalFlags() first
         po["wxcfg"] = "gcc_dll\\msw";
         po["wxcfgfile"] = po["prefix"] + "\\lib\\" + po["wxcfg"] + "\\build.cfg";
@@ -2584,4 +2453,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-
