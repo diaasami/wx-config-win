@@ -1026,19 +1026,23 @@ public:
         po["SETUPHDIR"]  = po["LIBDIRNAME"] + "/" + po["PORTNAME"] + po["WXUNIVNAME"];
         po["SETUPHDIR"] += po["WXUNICODEFLAG"] + po["WXDEBUGFLAG"];
 
-        po["cflags"]  = easyMode(po["__DEBUGINFO"]) + easyMode(po["__OPTIMIZEFLAG_2"]) + po["__THREADSFLAG"];
-        po["cflags"] += po["GCCFLAGS"] + addDefine("HAVE_W32API_H") + addDefine("__WXMSW__") + po["__WXUNIV_DEFINE_p"];
+        po["cppflags"]  = easyMode(po["__DEBUGINFO"]) + easyMode(po["__OPTIMIZEFLAG_2"]) + po["__THREADSFLAG"];
+        po["cppflags"] += po["GCCFLAGS"] + addDefine("HAVE_W32API_H") + addDefine("__WXMSW__") + po["__WXUNIV_DEFINE_p"];
         if(cfg["BUILD"] == "release")
-            po["cflags"] += addDefine("NDEBUG");
+            po["cppflags"] += addDefine("NDEBUG");
 
-        po["cflags"] += po["__DEBUG_DEFINE_p"] + po["__EXCEPTIONS_DEFINE_p"] + po["__RTTI_DEFINE_p"];
-        po["cflags"] += po["__THREAD_DEFINE_p"] + po["__UNICODE_DEFINE_p"] + po["__MSLU_DEFINE_p"];
-        po["cflags"] += po["__GFXCTX_DEFINE_p"];
-        po["cflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "/include");/*-W */
-        po["cflags"] += easyMode(addFlag("-Wall")) + easyMode(addIncludeDir(".")) + po["__DLLFLAG_p"];
-        po["cflags"] += easyMode(addIncludeDir("./../../samples")) + /*addDefine("NOPCH") +*/ po["__RTTIFLAG_5"] + po["__EXCEPTIONSFLAG_6"];
-        po["cflags"] += addFlag("-Wno-ctor-dtor-privacy") + addFlag("-pipe") + addFlag("-fmessage-length=0");
-        po["cflags"] += cfg["CPPFLAGS"] + " " + cfg["CXXFLAGS"] + " ";
+        po["cppflags"] += po["__DEBUG_DEFINE_p"] + po["__EXCEPTIONS_DEFINE_p"] + po["__RTTI_DEFINE_p"];
+        po["cppflags"] += po["__THREAD_DEFINE_p"] + po["__UNICODE_DEFINE_p"] + po["__MSLU_DEFINE_p"];
+        po["cppflags"] += po["__GFXCTX_DEFINE_p"];
+        po["cppflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "/include");/*-W */
+        po["cppflags"] += easyMode(addFlag("-Wall")) + easyMode(addIncludeDir(".")) + po["__DLLFLAG_p"];
+        po["cppflags"] += easyMode(addIncludeDir("./../../samples")) + /*addDefine("NOPCH") +*/ po["__RTTIFLAG_5"] + po["__EXCEPTIONSFLAG_6"];
+        po["cppflags"] += addFlag("-Wno-ctor-dtor-privacy") + addFlag("-pipe") + addFlag("-fmessage-length=0");
+        po["cppflags"] += cfg["CPPFLAGS"] + " " + cfg["CXXFLAGS"] + " ";
+        
+        po["cflags"] = po["cppflags"]+ cfg["CFLAGS"] + " ";
+        
+        po["cxxflags"] = po["cppflags"] + cfg["CXXFLAGS"] + " ";
 
         po["libs"]  = cfg["LDFLAGS"] + " ";
         po["libs"] += easyMode(po["__DEBUGINFO"]) + po["__THREADSFLAG"];
@@ -1337,15 +1341,15 @@ public:
         po["SETUPHDIR"]  = po["LIBDIRNAME"] + "/" + po["PORTNAME"] + po["WXUNIVNAME"];
         po["SETUPHDIR"] += po["WXUNICODEFLAG"] + po["WXDEBUGFLAG"];
 
-        po["cflags"]  = easyMode(po["__DEBUGINFO_0"]) + easyMode(po["__OPTIMIZEFLAG_4"]);
-        po["cflags"] += po["__RUNTIME_LIBS_8"] + " " + addDefine("_WIN32_WINNT=0x0400");
-        po["cflags"] += addDefine("__WXMSW__") + po["__WXUNIV_DEFINE_p"];
-        po["cflags"] += po["__DEBUG_DEFINE_p"] + po["__EXCEPTIONS_DEFINE_p"] + po["__RTTI_DEFINE_p"];
-        po["cflags"] += po["__THREAD_DEFINE_p"] + po["__UNICODE_DEFINE_p"] + po["__MSLU_DEFINE_p"];
-        po["cflags"] += po["__GFXCTX_DEFINE_p"];
-        po["cflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "/include") + easyMode(addFlag("-w-")) + easyMode(addIncludeDir(".")) + po["__DLLFLAG_p"] + easyMode(addFlag("-WA"));
-        po["cflags"] += easyMode(addIncludeDir(po["prefix"] + "/samples")) + easyMode(addDefine("NOPCH")) + po["__RTTIFLAG_9"] + po["__EXCEPTIONSFLAG_10"];
-        po["cflags"] += cfg["CPPFLAGS"] + " " + cfg["CXXFLAGS"] + " ";
+        po["cppflags"]  = easyMode(po["__DEBUGINFO_0"]) + easyMode(po["__OPTIMIZEFLAG_4"]);
+        po["cppflags"] += po["__RUNTIME_LIBS_8"] + " " + addDefine("_WIN32_WINNT=0x0400");
+        po["cppflags"] += addDefine("__WXMSW__") + po["__WXUNIV_DEFINE_p"];
+        po["cppflags"] += po["__DEBUG_DEFINE_p"] + po["__EXCEPTIONS_DEFINE_p"] + po["__RTTI_DEFINE_p"];
+        po["cppflags"] += po["__THREAD_DEFINE_p"] + po["__UNICODE_DEFINE_p"] + po["__MSLU_DEFINE_p"];
+        po["cppflags"] += po["__GFXCTX_DEFINE_p"];
+        po["cppflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "/include") + easyMode(addFlag("-w-")) + easyMode(addIncludeDir(".")) + po["__DLLFLAG_p"] + easyMode(addFlag("-WA"));
+        po["cppflags"] += easyMode(addIncludeDir(po["prefix"] + "/samples")) + easyMode(addDefine("NOPCH")) + po["__RTTIFLAG_9"] + po["__EXCEPTIONSFLAG_10"];
+        po["cppflags"] += cfg["CPPFLAGS"] + " " + cfg["CXXFLAGS"] + " ";
 
 
 
@@ -1654,14 +1658,14 @@ public:
         po["SETUPHDIR"]  = po["LIBDIRNAME"] + "/" + po["PORTNAME"] + po["WXUNIVNAME"];
         po["SETUPHDIR"] += po["WXUNICODEFLAG"] + po["WXDEBUGFLAG"];
 
-        po["cflags"]  = "/M" + po["__RUNTIME_LIBS_8"] + po["__DEBUGRUNTIME_3"] + " " + addDefine("WIN32");
-        po["cflags"] += easyMode(po["__DEBUGINFO_0"]) + easyMode(po["____DEBUGRUNTIME_2_p"]);
-        po["cflags"] += easyMode(po["__OPTIMIZEFLAG_4"]) + po["__NO_VC_CRTDBG_p"] + addDefine("__WXMSW__") + po["__WXUNIV_DEFINE_p"];
-        po["cflags"] += po["__DEBUG_DEFINE_p"] + po["__EXCEPTIONS_DEFINE_p"] + po["__RTTI_DEFINE_p"];
-        po["cflags"] += po["__THREAD_DEFINE_p"] + po["__UNICODE_DEFINE_p"] + po["__MSLU_DEFINE_p"] + po["__GFXCTX_DEFINE_p"];
-        po["cflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "/include") + easyMode(addFlag("/W4")) + easyMode(addIncludeDir(".")) + po["__DLLFLAG_p"] + addDefine("_WINDOWS");
-        po["cflags"] += easyMode(addIncludeDir(po["prefix"] + "/samples")) + easyMode(addDefine("NOPCH")) + po["__RTTIFLAG_9"] + po["__EXCEPTIONSFLAG_10"];
-        po["cflags"] += cfg["CPPFLAGS"] + " " + cfg["CXXFLAGS"] + " ";
+        po["cppflags"]  = "/M" + po["__RUNTIME_LIBS_8"] + po["__DEBUGRUNTIME_3"] + " " + addDefine("WIN32");
+        po["cppflags"] += easyMode(po["__DEBUGINFO_0"]) + easyMode(po["____DEBUGRUNTIME_2_p"]);
+        po["cppflags"] += easyMode(po["__OPTIMIZEFLAG_4"]) + po["__NO_VC_CRTDBG_p"] + addDefine("__WXMSW__") + po["__WXUNIV_DEFINE_p"];
+        po["cppflags"] += po["__DEBUG_DEFINE_p"] + po["__EXCEPTIONS_DEFINE_p"] + po["__RTTI_DEFINE_p"];
+        po["cppflags"] += po["__THREAD_DEFINE_p"] + po["__UNICODE_DEFINE_p"] + po["__MSLU_DEFINE_p"] + po["__GFXCTX_DEFINE_p"];
+        po["cppflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "/include") + easyMode(addFlag("/W4")) + easyMode(addIncludeDir(".")) + po["__DLLFLAG_p"] + addDefine("_WINDOWS");
+        po["cppflags"] += easyMode(addIncludeDir(po["prefix"] + "/samples")) + easyMode(addDefine("NOPCH")) + po["__RTTIFLAG_9"] + po["__EXCEPTIONSFLAG_10"];
+        po["cppflags"] += cfg["CPPFLAGS"] + " " + cfg["CXXFLAGS"] + " ";
 
         po["libs"]  = easyMode(addFlag("/NOLOGO"));
         po["libs"] += cfg["LDFLAGS"] + " ";
@@ -1863,15 +1867,15 @@ public:
         po["SETUPHDIR"]  = po["LIBDIRNAME"] + "/" + po["PORTNAME"] + po["WXUNIVNAME"];
         po["SETUPHDIR"] += po["WXUNICODEFLAG"] + po["WXDEBUGFLAG"];
 
-        po["cflags"]  = easyMode(po["__DEBUGINFO_0"]) + easyMode(po["__OPTIMIZEFLAG_2"]) + po["__THREADSFLAG_5"];
-        po["cflags"] += po["__RUNTIME_LIBS_6"] + addDefine("__WXMSW__") + po["__WXUNIV_DEFINE_p"];
-        po["cflags"] += po["__DEBUG_DEFINE_p"] + po["__EXCEPTIONS_DEFINE_p"] + po["__RTTI_DEFINE_p"];
-        po["cflags"] += po["__THREAD_DEFINE_p"] + po["__UNICODE_DEFINE_p"] + po["__MSLU_DEFINE_p"] + po["__GFXCTX_DEFINE_p"];
-        po["cflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "/include");
-        po["cflags"] += addFlag("-wx") + addFlag("-wcd=549") + addFlag("-wcd=656") + addFlag("-wcd=657") + addFlag("-wcd=667");
-        po["cflags"] += easyMode(addIncludeDir(".")) + po["__DLLFLAG_p"];
-        po["cflags"] += easyMode(addIncludeDir(po["prefix"] + "/samples")) + addDefine("NOPCH") + po["__RTTIFLAG_7"] + po["__EXCEPTIONSFLAG_8"];
-        po["cflags"] += cfg["CPPFLAGS"] + " " + cfg["CXXFLAGS"] + " ";
+        po["cppflags"]  = easyMode(po["__DEBUGINFO_0"]) + easyMode(po["__OPTIMIZEFLAG_2"]) + po["__THREADSFLAG_5"];
+        po["cppflags"] += po["__RUNTIME_LIBS_6"] + addDefine("__WXMSW__") + po["__WXUNIV_DEFINE_p"];
+        po["cppflags"] += po["__DEBUG_DEFINE_p"] + po["__EXCEPTIONS_DEFINE_p"] + po["__RTTI_DEFINE_p"];
+        po["cppflags"] += po["__THREAD_DEFINE_p"] + po["__UNICODE_DEFINE_p"] + po["__MSLU_DEFINE_p"] + po["__GFXCTX_DEFINE_p"];
+        po["cppflags"] += addIncludeDir(po["SETUPHDIR"]) + addIncludeDir(po["prefix"] + "/include");
+        po["cppflags"] += addFlag("-wx") + addFlag("-wcd=549") + addFlag("-wcd=656") + addFlag("-wcd=657") + addFlag("-wcd=667");
+        po["cppflags"] += easyMode(addIncludeDir(".")) + po["__DLLFLAG_p"];
+        po["cppflags"] += easyMode(addIncludeDir(po["prefix"] + "/samples")) + addDefine("NOPCH") + po["__RTTIFLAG_7"] + po["__EXCEPTIONSFLAG_8"];
+        po["cppflags"] += cfg["CPPFLAGS"] + " " + cfg["CXXFLAGS"] + " ";
 
         po["lbc"]  = "option quiet\n";
         po["lbc"] += "name $^@\n";
@@ -2362,8 +2366,12 @@ void outputFlags(Options& po, const CmdLineOptions& cl)
         std::cout << po["cxx"];
     if (cl.keyExists("--ld"))
         std::cout << po["ld"];
-    if (cl.keyExists("--cflags") || cl.keyExists("--cxxflags") || cl.keyExists("--cppflags"))
+    if (cl.keyExists("--cflags"))
         std::cout << po["cflags"] << std::endl;
+    if (cl.keyExists("--cxxflags"))
+        std::cout << po["cxxflags"] << std::endl;
+    if (cl.keyExists("--cppflags"))
+        std::cout << po["cppflags"] << std::endl;
     if (cl.keyExists("--libs"))
         std::cout << po["libs"] << std::endl;
     if (cl.keyExists("--rcflags"))
