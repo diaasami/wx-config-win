@@ -1038,11 +1038,11 @@ public:
         po["cppflags"] += easyMode(addFlag("-Wall")) + easyMode(addIncludeDir(".")) + po["__DLLFLAG_p"];
         po["cppflags"] += easyMode(addIncludeDir("./../../samples")) + /*addDefine("NOPCH") +*/ po["__RTTIFLAG_5"] + po["__EXCEPTIONSFLAG_6"];
         po["cppflags"] += addFlag("-Wno-ctor-dtor-privacy") + addFlag("-pipe") + addFlag("-fmessage-length=0");
-        po["cppflags"] += cfg["CPPFLAGS"] + " " + cfg["CXXFLAGS"] + " ";
+        po["cppflags"] += cfg["CPPFLAGS"] + " ";
         
-        po["cflags"] = po["cppflags"]+ cfg["CFLAGS"] + " ";
+        po["cflags"] = po["cppflags"]+ " " + cfg["CFLAGS"] + " ";
         
-        po["cxxflags"] = po["cppflags"] + cfg["CXXFLAGS"] + " ";
+        po["cxxflags"] = po["cppflags"] + " " + cfg["CXXFLAGS"] + " ";
 
         po["libs"]  = cfg["LDFLAGS"] + " ";
         po["libs"] += easyMode(po["__DEBUGINFO"]) + po["__THREADSFLAG"];
