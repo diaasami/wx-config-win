@@ -368,9 +368,10 @@ protected:
         // magic keyword std: links with core,base_xml,base_net,base
         if (m_libs.empty() || libExists("std")) {
 //            addLib("aui");
-//            addLib("xrc");
-//            addLib("html");
-//            addLib("adv");
+            addLib("xrc");
+            addLib("html");
+            addLib("qa");
+            addLib("adv");
             addLib("core");
             addLib("xml");
             addLib("net");
