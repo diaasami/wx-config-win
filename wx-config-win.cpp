@@ -365,7 +365,7 @@ protected:
         }
 
         // assuming magic keyword 'std' as a lib parameter for non-monolithic
-        // magic keyword std: links with core,base_xml,base_net,base
+        // magic keyword std: links with xrc,html,qa,adv,core,base_xml,base_net,base
         if (m_libs.empty() || libExists("std")) {
 //            addLib("aui");
             addLib("xrc");
