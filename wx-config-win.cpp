@@ -732,6 +732,8 @@ public:
 
         po["__LIB_SHELL32_p"] = addLib("shell32");
 
+        po["__LIB_SHLWAPI_p"] = addLib("shlwapi");
+
         po["__LIB_COMCTL32_p"] = addLib("comctl32");
 
         if (sho["wxUSE_OLE"])
@@ -751,6 +753,8 @@ public:
         po["__LIB_RPCRT4_p"] = addLib("rpcrt4");
 
         po["__LIB_ADVAPI32_p"] = addLib("advapi32");
+
+        po["__LIB_VERSION_p"] = addLib("version");
 
         if (sho["wxUSE_SOCKETS"])
             po["__LIB_WSOCK32_p"] = addLib("wsock32");
@@ -808,9 +812,9 @@ public:
         libs += po["EXTRALIBS_FOR_BASE"] + po["__UNICOWS_LIB_p"] + po["__GDIPLUS_LIB_p"];
         libs += po["__LIB_KERNEL32_p"] + po["__LIB_USER32_p"] + po["__LIB_GDI32_p"];
         libs += po["__LIB_COMDLG32_p"] + po["__LIB_REGEX_p"] + po["__LIB_WINSPOOL_p"];
-        libs += po["__LIB_WINMM_p"] + po["__LIB_SHELL32_p"] + po["__LIB_COMCTL32_p"];
+        libs += po["__LIB_WINMM_p"] + po["__LIB_SHELL32_p"] + po["__LIB_SHLWAPI_p"] + po["__LIB_COMCTL32_p"];
         libs += po["__LIB_OLE32_p"] + po["__LIB_OLEAUT32_p"] + po["__LIB_UUID_p"];
-        libs += po["__LIB_RPCRT4_p"] + po["__LIB_ADVAPI32_p"] + po["__LIB_WSOCK32_p"];
+        libs += po["__LIB_RPCRT4_p"] + po["__LIB_ADVAPI32_p"] + po["__LIB_VERSION_p"] + po["__LIB_WSOCK32_p"];
         libs += po["__LIB_ODBC32_p"];
 
         return libs;
