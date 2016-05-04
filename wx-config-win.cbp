@@ -47,10 +47,19 @@
 					<Add option="/EHsc" />
 				</Compiler>
 			</Target>
+			<Environment>
+				<Variable name="WX_CONFIG" value="$(TARGET_OUTPUT_FILE) --wxcfg=$(WXCFG)" />
+			</Environment>
 		</Build>
 		<VirtualTargets>
 			<Add alias="All" targets="wx-config-win GCC;" />
 		</VirtualTargets>
+		<ExtraCommands>
+			<Add before="CMD /C echo $(WXWIN)\lib\$(WXCFG)" />
+			<Add after="$(TARGET_OUTPUT_FILE) --version" />
+			<Add after="CMD /C $(WX_CONFIG) --cflags" />
+			<Mode after="always" />
+		</ExtraCommands>
 		<Unit filename="wx-config-win.cpp" />
 		<Extensions>
 			<code_completion />
