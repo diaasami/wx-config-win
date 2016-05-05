@@ -76,6 +76,7 @@ protected:
 class BuildFileOptions : public Options
 {
 public:
+    BuildFileOptions() {;}
     BuildFileOptions(const std::string& filepath) {
         parse(filepath);
     }
@@ -882,8 +883,13 @@ public:
         /// Searchs for '<prefix>\build\msw\config.*' first
         std::string cfg_first = po["prefix"] + "/build/msw/config." + getName();
 
+        BuildFileOptions cfg;
+
         /// config.* options
-        BuildFileOptions cfg(cfg_first);
+        if (std::ifstream(cfg_first.c_str()).good()) {
+            // File exists so use it.
+            cfg.parse(cfg_first);
+        }
 
         /// build.cfg options
         cfg.parse(po["wxcfgfile"]);
