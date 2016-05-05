@@ -5,10 +5,10 @@
 // Created:     2006-03-23
 // Copyright:   (c) Takeshi Miya
 // Licence:     wxWidgets licence
-// $Rev$
-// $URL$
-// $Date$
-// $Id$
+// $Rev: 26 $
+// $URL: http://wx-config-win.googlecode.com/svn/trunk/wx-config-win.cpp $
+// $Date: 2006-12-21 04:08:16 +0200 (Thu, 21 Dec 2006) $
+// $Id: wx-config-win.cpp 26 2006-12-21 02:08:16Z takeshimiya $
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
@@ -26,7 +26,7 @@
 
 std::string getSvnRevision()
 {
-    std::string str = "$Rev$";
+    std::string str = "$Rev: 26 $";
     if (str.length() > 8)
         return str.substr(6, str.length()-8);
     else
@@ -35,7 +35,7 @@ std::string getSvnRevision()
 
 std::string getSvnDate()
 {
-    std::string str = "$Date$";
+    std::string str = "$Date: 2006-12-21 04:08:16 +0200 (Thu, 21 Dec 2006) $";
     if (str.length() > 16)
         return str.substr(7, 10);
     else
