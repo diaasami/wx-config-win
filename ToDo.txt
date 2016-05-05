@@ -1,3 +1,5 @@
+Remove the use of "build/msw/config.gcc".|
+
 Add support of option "--version=".
 
 Test the output and options in comparision to MSys wxWidgets' 3.0 Branch.
