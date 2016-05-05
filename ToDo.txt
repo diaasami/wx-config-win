@@ -3,3 +3,24 @@ Remove the use of "build/msw/config.gcc".|
 Add support of option "--version=".
 
 Test the output and options in comparision to MSys wxWidgets' 3.0 Branch.
+
+USE_AUI=1
+USE_HTML=1
+USE_MEDIA=1
+USE_RICHTEXT=1
+
+
+
+    if test "$wxUSE_ACCESSIBILITY" = "yes" ; then
+        LIBS="$LIBS -loleacc"
+    fi
+
+wxUSE_MSW
+wxUSE_GTK
+wxUSE_QT
+
+wxUSE_UNIX
+
+wxUSE_OWNER_DRAWN
+
+wxPREFIX
