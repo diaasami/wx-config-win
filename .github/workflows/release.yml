@@ -50,11 +50,18 @@ jobs:
       - name: Check out the compiler
         run: /mingw32/bin/i686-w64-mingw32-g++ --version
       
-      - name: Build executable
+      - name: Build executable 1
         run: |
           set -x
           cd $GITHUB_WORKSPACE
-          /mingw32/bin/i686-w64-mingw32-make
+          ./build.sh
+      
+      - name: Build executable 2
+        if: success() || failure()
+        run: |
+          set -x
+          cd $GITHUB_WORKSPACE
+          /mingw32/bin/mingw32-make
 
       - name: Get current date
         id: date
