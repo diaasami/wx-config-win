@@ -40,6 +40,15 @@ jobs:
       - name: Run a multi-line script
         run: uname -a
       
+      - name: Find out where the executable is
+        run: ls -la /
+      
+      - name: Check out /mingw32
+        run: ls -la /mingw32
+      
+      - name: Check out /mingw64
+        run: ls -la /mingw64
+      
       - name: Build executable
         run: /mingw32/bin/g++.exe $GITHUB_WORKSPACE/wx-config-win.cpp -o wx-config
       
