@@ -44,13 +44,13 @@ jobs:
         run: ls -la /
       
       - name: Check out /mingw32
-        run: ls -la /mingw32
+        run: ls -la /mingw32/bin
       
       - name: Check out /mingw64
-        run: ls -la /mingw64
+        run: ls -la /mingw64/bin
       
       - name: Build executable
-        run: /mingw32/bin/g++.exe $GITHUB_WORKSPACE/wx-config-win.cpp -o wx-config
+        run: /mingw32/bin/g++ $GITHUB_WORKSPACE/wx-config-win.cpp -o wx-config
       
       - name: Get current date
         id: date
