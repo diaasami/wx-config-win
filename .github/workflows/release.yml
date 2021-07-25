@@ -41,7 +41,7 @@ jobs:
         run: uname -a
       
       - name: Build executable
-        run: i686-w64-mingw32-c++ $GITHUB_WORKSPACE/wx-config-win.cpp -o wx-config
+        run: /mingw32/bin/g++.exe $GITHUB_WORKSPACE/wx-config-win.cpp -o wx-config
       
       - name: Get current date
         id: date
