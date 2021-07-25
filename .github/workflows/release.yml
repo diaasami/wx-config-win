@@ -60,6 +60,7 @@ jobs:
       
       - name: Build executable
         run: |
+          set -x
           cd $GITHUB_WORKSPACE
           /mingw32/bin/i686-w64-mingw32-g++ wx-config-win.cpp -o wx-config
 
