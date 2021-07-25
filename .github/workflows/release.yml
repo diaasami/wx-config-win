@@ -35,7 +35,10 @@ jobs:
           update: true
           install: >-
             base-devel
-            mingw-w64-i686-toolchain
+            mingw-w64-i686-binutils
+            mingw-w64-i686-gcc
+            mingw-w64-i686-gcc-libs
+            mingw-w64-i686-make
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
@@ -49,10 +52,13 @@ jobs:
       
       - name: Check out /mingw64
         run: ls -la /mingw64/bin
+    
+      - name: Check out the compiler
+        run: /mingw32/bin/i686-w64-mingw32-g++ -version
       
       - name: Build executable
-        run: /mingw32/bin/g++ $GITHUB_WORKSPACE/wx-config-win.cpp -o wx-config
-      
+        run: /mingw32/bin/i686-w64-mingw32-g++ $GITHUB_WORKSPACE/wx-config-win.cpp -o wx-config
+
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
