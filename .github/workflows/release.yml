@@ -34,10 +34,7 @@ jobs:
         with:
           update: true
           install: >-
-            mingw-w64-i686-binutils
-            mingw-w64-i686-gcc
-            mingw-w64-i686-gcc-libs
-            mingw-w64-i686-make
+            mingw-w64-i686-toolchain
       
       - name: Check out the checkout ;)
         run: |
