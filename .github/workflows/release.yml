@@ -35,7 +35,10 @@ jobs:
           msystem: mingw32
           update: true
           install: >-
-            mingw-w64-i686-toolchain
+            mingw-w64-i686-binutils
+            mingw-w64-i686-gcc
+            mingw-w64-i686-gcc-libs
+            mingw-w64-i686-make
       
       - name: Check out the checkout ;)
         run: |
@@ -49,10 +52,7 @@ jobs:
         run: /mingw32/bin/i686-w64-mingw32-g++ --version
       
       - name: Build executable 1
-        run: |
-          set -x
-          cd $GITHUB_WORKSPACE
-          ./build.sh
+        run: ./build.sh
       
 #      - name: Build executable 2
 #        if: success() || failure()
@@ -86,6 +86,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: $GITHUB_WORKSPACE/wx-config.exe
+          asset_path: wx-config.exe
           asset_name: wx-config.exe
           asset_content_type: application/exe
