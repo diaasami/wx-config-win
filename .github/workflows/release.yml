@@ -54,7 +54,7 @@ jobs:
         run: ls -la /mingw64/bin
     
       - name: Check out the compiler
-        run: /mingw32/bin/i686-w64-mingw32-g++ -version
+        run: /mingw32/bin/i686-w64-mingw32-g++ --version
       
       - name: Build executable
         run: /mingw32/bin/i686-w64-mingw32-g++ $GITHUB_WORKSPACE/wx-config-win.cpp -o wx-config
