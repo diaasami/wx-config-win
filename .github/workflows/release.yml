@@ -76,7 +76,6 @@ jobs:
           prerelease: false
           release_name: ${{ steps.date.outputs.date }}
           #${{ steps.version.outputs.version }}
-          tag_name: ${{ github.ref }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
     
